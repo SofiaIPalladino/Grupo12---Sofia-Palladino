@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="19.0.2" class="java.beans.XMLDecoder">
+ <object class="org.persistencia.EmpresaDTO">
+  <void property="choferes">
+   <object class="java.util.ArrayList">
+    <void method="add">
+     <object class="org.chofer.ChoferTemporario">
+      <void property="cantViajes">
+       <int>1</int>
+      </void>
+      <void property="dni">
+       <string>451542</string>
+      </void>
+      <void property="nombre">
+       <string>ChoferTemporario</string>
+      </void>
+      <void property="puntaje">
+       <int>20</int>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.chofer.ChoferContratado">
+      <void property="dni">
+       <string>451352</string>
+      </void>
+      <void property="nombre">
+       <string>ChoferContratado</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.chofer.ChoferPermanente">
+      <void property="dni">
+       <string>453542</string>
+      </void>
+      <void property="fechaIngreso">
+       <object class="java.util.Date">
+        <long>1585710000000</long>
+       </object>
+      </void>
+      <void property="nombre">
+       <string>ChoferPermanente</string>
+      </void>
+     </object>
+    </void>
+   </object>
+  </void>
+  <void property="choferesEnUso">
+   <object class="java.util.ArrayList"/>
+  </void>
+  <void property="clientes">
+   <object class="java.util.ArrayList"/>
+  </void>
+  <void property="recaudado">
+   <double>3200.0</double>
+  </void>
+  <void property="usuarios">
+   <object class="java.util.ArrayList"/>
+  </void>
+  <void property="vehiculos">
+   <object class="java.util.ArrayList">
+    <void method="add">
+     <object class="org.vehiculo.Combi" id="Combi0">
+      <void property="numpatente">
+       <string>2325353</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.vehiculo.Moto">
+      <void property="numpatente">
+       <string>32143</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="org.vehiculo.Automovil">
+      <void property="numpatente">
+       <string>456624</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object idref="Combi0"/>
+    </void>
+   </object>
+  </void>
+  <void property="vehiculosEnUso">
+   <object class="java.util.ArrayList"/>
+  </void>
+  <void property="viajes">
+   <object class="java.util.ArrayList">
+    <void method="add">
+     <object class="org.viaje.ViajeZonaEstandar">
+      <void property="status">
+       <string>Finalizado</string>
+      </void>
+     </object>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>
