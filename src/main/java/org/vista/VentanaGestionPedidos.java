@@ -149,11 +149,13 @@ public class VentanaGestionPedidos extends JFrame implements Observer {
 
     private void muestraHilosActivos() {
         StringBuilder informacionHilos = Empresa.getInstance().getInformacionAccionarHilos();
-        panelHilosActivos.removeAll();
-        String logTexto = "<html>" + informacionHilos.toString().replace("\n", "<br>") + "</html>";
-        panelHilosActivos.add(new JLabel(logTexto));
-        panelHilosActivos.revalidate();
-        panelHilosActivos.repaint();
+        if (panelHilosActivos !=null) {
+            panelHilosActivos.removeAll();
+            String logTexto = "<html>" + informacionHilos.toString().replace("\n", "<br>") + "</html>";
+            panelHilosActivos.add(new JLabel(logTexto));
+            panelHilosActivos.revalidate();
+            panelHilosActivos.repaint();
+        }
     }
 
     @Override

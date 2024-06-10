@@ -29,13 +29,12 @@ public class Simulacion {
         int cantClientes = 2;
         int cantidadUnidadesCadaTipo = 2;
         int cantidadMaximaSolicitudesCliente = 1;
-        int cantidadMaximaSolicitudesChofer = 1;
+        int cantidadMaximaSolicitudesChofer = 2;
         int cantidadMaximaChoferesTipo = 2;
 
         empresa.setCantidadMaximaSolicitudesPorCliente(cantidadMaximaSolicitudesCliente);
         empresa.setCantidadMaximaChoferesTipo(cantidadMaximaChoferesTipo);
         empresa.setCantidadMaximaSolicitudesPorChofer(cantidadMaximaSolicitudesChofer);
-        //Cantidad de unidades de cada tipo
 
         //Choferes
         Chofer choferT1 = new ChoferTemporario("1234", "Chofer Temporario1");
@@ -75,7 +74,6 @@ public class Simulacion {
         new VentanaInicio().setVisible(true);
         new VentanaGestionPedidos().setVisible(true);
 
-        /*
         IPersistencia persistencia = new PersistenciaXML();
 
         try {
@@ -85,20 +83,18 @@ public class Simulacion {
                 throw new RuntimeException(e);
             }
 
-            EmpresaDTO edto = new EmpresaDTO(e);
+          //  EmpresaDTO edto = new EmpresaDTO(e);
 
-            persistencia.escribir(edto);
+          //  persistencia.escribir(edto);
             persistencia.cerrarOutput();
 
             persistencia.abrirInput("empresa.xml");
             EmpresaDTO leoEmpresa = (EmpresaDTO) persistencia.leer();
-            e.setChoferes(edto.getChoferes());
-            e.setVehiculos(edto.getVehiculos());
+            //e.setChoferes(edto.getChoferes());
+           // e.setVehiculos(edto.getVehiculos());
             System.out.println(leoEmpresa.getChoferes());
 
         } catch (Exception e3) {
         }
-
-         */
     }
 }
