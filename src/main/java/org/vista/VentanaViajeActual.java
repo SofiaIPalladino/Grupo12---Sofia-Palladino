@@ -22,37 +22,33 @@ public class VentanaViajeActual extends JFrame implements Observer {
 
 
     public VentanaViajeActual(IViaje viaje) {
-        // Configuración de la ventana principal
         Empresa.getInstance().addObserver(this);
         this.viaje = viaje;
         setTitle("Información Viaje Actual");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
-        setResizable(false); // Evitar que la ventana sea redimensionable
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-        // Creación del panel principal
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(null); // Usar Layout nulo para posicionar manualmente los componentes
+        mainPanel.setLayout(null);
 
-        // Etiqueta de título
         JLabel titleLabel = new JLabel("INFORMACION VIAJE ACTUAL", SwingConstants.CENTER);
-        titleLabel.setBounds(50, 20, 300, 30); // Posición y tamaño de la etiqueta
+        titleLabel.setBounds(50, 20, 300, 30);
         mainPanel.add(titleLabel);
 
-        // Crear y agregar etiquetas y campos de texto para cada campo
         String[] labels = {"ESTADO", "FECHA", "CHOFER", "COSTO", "VEHICULO", "ZONA", "MASCOTA", "EQUIPAJE", "CANTIDAD PERSONAS", "DISTANCIA"};
         textFields = new JTextField[labels.length];
 
         int yPosition = 100;
         for (int i = 0; i < labels.length; i++) {
             JLabel jLabel = new JLabel(labels[i] + ":");
-            jLabel.setBounds(50, yPosition, 150, 30); // Posición y tamaño de la etiqueta
+            jLabel.setBounds(50, yPosition, 150, 30);
             mainPanel.add(jLabel);
 
             JTextField textField = new JTextField();
-            textField.setBounds(200, yPosition, 150, 30); // Posición y tamaño del campo de texto
-            textField.setEditable(false); // Hacer que el campo no sea editable
+            textField.setBounds(200, yPosition, 150, 30);
+            textField.setEditable(false);
             mainPanel.add(textField);
             textFields[i] = textField;
 
@@ -61,7 +57,7 @@ public class VentanaViajeActual extends JFrame implements Observer {
 
         // Botón Cerrar
         JButton closeButton = new JButton("CERRAR");
-        closeButton.setBounds(150, 410, 100, 30); // Posición y tamaño del botón
+        closeButton.setBounds(150, 410, 100, 30);
         closeButton.setVisible(false);
         closeButton.addActionListener(new ActionListener() {
             @Override
@@ -74,8 +70,8 @@ public class VentanaViajeActual extends JFrame implements Observer {
 
         // Botón Pagar
         botonPaga = new JButton("PAGAR");
-        botonPaga.setBounds(150, 410, 100, 30); // Posición y tamaño del botón
-        botonPaga.setEnabled(viaje.getStatus().equals("Iniciado")); // Deshabilitar por defecto si el estado no es "Iniciado"
+        botonPaga.setBounds(150, 410, 100, 30);
+        botonPaga.setEnabled(viaje.getStatus().equals("Iniciado"));
         botonPaga.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,7 +85,6 @@ public class VentanaViajeActual extends JFrame implements Observer {
 
         actualizarEstado();
 
-        // Agregar el panel principal a la ventana
         add(mainPanel);
 
     }
@@ -132,7 +127,6 @@ public class VentanaViajeActual extends JFrame implements Observer {
         textFields[7].setText(viaje.getEquipaje());
         textFields[8].setText(String.valueOf(viaje.getCantidadPersonas()));
         textFields[9].setText(String.valueOf(viaje.getDistanciaReal()) + " km");
-        // Actualizar el estado del botón de pago
         botonPaga.setEnabled(viaje.getStatus().equals("Iniciado"));
     }
 

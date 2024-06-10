@@ -12,40 +12,35 @@ public class VentanaViajesFinalizados extends JFrame {
     private JTextField[] textFields;
 
     public VentanaViajesFinalizados(List<IViaje> viajes) {
-        // Configuración de la ventana principal
         setTitle("Historial de Viajes Finalizados");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
-        setResizable(false); // Evitar que la ventana sea redimensionable
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-        // Creación del panel principal
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(null); // Usar Layout nulo para posicionar manualmente los componentes
+        mainPanel.setLayout(null);
 
-        // Etiqueta de título
         JLabel titleLabel = new JLabel("HISTORIAL VIAJES FINALIZADOS", SwingConstants.CENTER);
-        titleLabel.setBounds(50, 20, 300, 30); // Posición y tamaño de la etiqueta
+        titleLabel.setBounds(50, 20, 300, 30);
         mainPanel.add(titleLabel);
 
-        // ComboBox para seleccionar un viaje
         JComboBox<IViaje> comboBox = new JComboBox<>(viajes.toArray(new IViaje[0]));
         comboBox.setBounds(50, 60, 300, 30);
         mainPanel.add(comboBox);
 
-        // Crear y agregar etiquetas y campos de texto para cada campo
         String[] labels = {"ESTADO","FECHA", "CHOFER", "COSTO", "VEHICULO", "ZONA", "MASCOTA", "EQUIPAJE", "CANTIDAD PERSONAS", "DISTANCIA"};
         textFields = new JTextField[labels.length];
 
         int yPosition = 100;
         for (int i = 0; i < labels.length; i++) {
             JLabel jLabel = new JLabel(labels[i] + ":");
-            jLabel.setBounds(50, yPosition, 150, 30); // Posición y tamaño de la etiqueta
+            jLabel.setBounds(50, yPosition, 150, 30);
             mainPanel.add(jLabel);
 
             JTextField textField = new JTextField();
-            textField.setBounds(200, yPosition, 150, 30); // Posición y tamaño del campo de texto
-            textField.setEditable(false); // Hacer que el campo no sea editable
+            textField.setBounds(200, yPosition, 150, 30);
+            textField.setEditable(false);
             mainPanel.add(textField);
             textFields[i] = textField;
 
@@ -54,7 +49,7 @@ public class VentanaViajesFinalizados extends JFrame {
 
         // Botón Cerrar
         JButton closeButton = new JButton("CERRAR");
-        closeButton.setBounds(150, 400, 100, 30); // Posición y tamaño del botón
+        closeButton.setBounds(150, 400, 100, 30);
         closeButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,10 +58,8 @@ public class VentanaViajesFinalizados extends JFrame {
         });
         mainPanel.add(closeButton);
 
-        // Agregar el panel principal a la ventana
         add(mainPanel);
 
-        // Listener para actualizar los campos de texto al seleccionar un viaje
         comboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +70,6 @@ public class VentanaViajesFinalizados extends JFrame {
             }
         });
 
-        // Inicializar los campos de texto con el primer viaje
         if (!viajes.isEmpty()) {
             comboBox.setSelectedIndex(0);
             updateTextFields(viajes.get(0));

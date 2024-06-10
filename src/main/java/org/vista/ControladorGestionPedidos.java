@@ -52,7 +52,6 @@ public class ControladorGestionPedidos {
             if (vehiculosAptos == null) {
                 throw new NoVehiculoException("No hay vehiculos aptos trabajando en este momento");
             }
-          //  System.out.println(vehiculosAptos);
             for (Map.Entry<Integer, Vehiculo> entry : vehiculosAptos.entrySet()) {
                 Vehiculo v = entry.getValue();
 
@@ -61,7 +60,6 @@ public class ControladorGestionPedidos {
                     break;
                 }
             }
-
             if (mejorVehiculo == null) {
                 try {
                     wait(1000);
@@ -71,7 +69,6 @@ public class ControladorGestionPedidos {
                 }
             }
         }
-        // Asignar el vehículo encontrado al viaje
         empresa.setVehiculoConViaje(mejorVehiculo);
         viaje.setVehiculo(mejorVehiculo);
         viaje.setStatus("Con Vehiculo");
@@ -95,61 +92,20 @@ public class ControladorGestionPedidos {
         return vehiculosCumplen;
     }
 
-    public List<Pedido> getPedidos() {
-        return empresa.getPedidos();
-    }
-
-    private static Vehiculo getVehiculo(Pedido pedido) throws NoVehiculoException {
-        List<Vehiculo> listadoVehiculos = Empresa.getInstance().getVehiculos();
-        int i = 0;
-        Vehiculo mejorVehiculo = null;
-        int mayorPrioridad = 0;
-        while (i < listadoVehiculos.size()) {
-            Vehiculo v = listadoVehiculos.get(i);
-            Integer prioridad = v.getPrioridad(pedido);
-            if (prioridad != null && prioridad.intValue() > mayorPrioridad) {// si prioridad es igual a null, el vehiculo no es apto para el pedido
-                if (v.verificaPasajeros(pedido.getCantPersonas()) && v.verificaBaul(pedido.usoBaul()) && v.verificaMascota(pedido.getMascota())) {
-                    mayorPrioridad = prioridad.intValue();
-                    mejorVehiculo = v;
-                }
-            }
-            i++;
-        }
-        if (mejorVehiculo != null) {
-            return mejorVehiculo;
-        }
-        throw new NoVehiculoException("No se encontro un vehiculo acorde al pedido");
-    }
-
-    private boolean buscarChofer() throws NoChoferException {
-        if (!empresa.getChoferes().isEmpty()) {
-            return true;
-        }
-        throw new NoChoferException("No se encuentra ningun chofer trabajando");
-    }
-
-
-
-
-    public void pagoViaje(Cliente cliente,IViaje viaje) throws ViajeNoEncontradoException {
-        cliente.pagoViaje(viaje);
-    }
-
     public void crearMonitorPedidos() {
         Runnable hiloCrearViaje = new MonitorPedidos(this);
         Thread hilo = new Thread(hiloCrearViaje);
         hilo.start();
     }
 
+    public List<Pedido> getPedidos() {
+        return empresa.getPedidos();
+    }
+
     public void asignarVehiculoHilo(IViaje viaje) {
         Runnable vehiculoHilo = new CrearVehiculoHilo(this, viaje);
         Thread hilo = new Thread(vehiculoHilo);
         hilo.start();
-    }
-
-    public void finalizarViaje(IViaje viaje){
-       // System.out.println(viaje);
-        viaje.getChofer().finalizarViaje(viaje);
     }
 
     public List<IViaje> getViajes() {
