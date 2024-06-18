@@ -74,4 +74,10 @@ public abstract class DecoratorViajes implements IViaje {
 	public int compareTo(IViaje viaje) {
 		return this.encapsulado.compareTo(viaje);
 	}
+
+	public Object clone() throws CloneNotSupportedException {
+		DecoratorViajes clon = (DecoratorViajes) super.clone();
+		clon.encapsulado = (IViaje) this.encapsulado.clone();
+		return clon;
+	}
 }

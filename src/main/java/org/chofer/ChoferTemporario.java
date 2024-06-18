@@ -10,7 +10,9 @@ public class ChoferTemporario extends Chofer {
 	private double plusXCantViajes=0.1;
 	private static int cantviajesbonus=40;
 
-
+	/**
+	 * Constructor necesario para la serialización.
+	 */
 	public ChoferTemporario(){
 
 	}
@@ -20,10 +22,6 @@ public class ChoferTemporario extends Chofer {
      * Constructor para crear un ChoferTemporario.
      * @param dni El número de identificación del chofer.
      * @param nombre El nombre del chofer.
-     * @param sueldoBasico El sueldo básico del chofer temporario.
-     * @param aportes El porcentaje de descuento por aportes jubilatorios.
-     * @param plusXCantViajes El porcentaje de aumento por cantidad de viajes realizados.
-     * @param cantViajes La cantidad de viajes realizados por el chofer.
      */
 	public ChoferTemporario(String dni, String nombre) {	
 		super(dni, nombre);
@@ -42,31 +40,4 @@ public class ChoferTemporario extends Chofer {
         sueldo -= sueldo * (aportes / 100);
         return sueldo;
 	}
-
-	public double getAportes() {
-		return aportes;
-	}
-
-	public double getPlusXCantViajes() {
-		return plusXCantViajes;
-	}
-
-	public void setPlusXCantViajes(double plusXCantViajes) {
-		this.plusXCantViajes = plusXCantViajes;
-	}
-
-	public int getCantViajes() {
-		return cantidadDeViajes;
-	}
-
-	public void setCantViajes(int cantViajes) {
-		this.cantidadDeViajes = cantViajes;
-	}
-
-	public double getSueldoBasico() {
-		return sueldoBasico;
-	}
-	
-	
-
 }

@@ -1,18 +1,22 @@
-package org.vista;
+package org.controladores;
 
 import org.excepciones.NoChoferException;
 import org.excepciones.NoVehiculoException;
-import org.excepciones.ViajeNoEncontradoException;
 import org.pedido.Pedido;
 import org.sistema.Empresa;
-import org.usuario.Cliente;
-import org.usuario.Usuario;
 import org.vehiculo.Vehiculo;
 import org.viaje.IViaje;
 import org.viaje.ViajeFactory;
+import org.vehiculo.CrearVehiculoHilo;
+import org.monitor.MonitorPedidos;
+import org.vista.VentanaViajeActual;
 
 import java.util.*;
 
+/**
+ * Controlador para la gestión de pedidos en la empresa.
+ * Convierte los pedidos en viajes y asigna vehículos a dichos viajes.
+ */
 public class ControladorGestionPedidos {
     private Empresa empresa;
 
@@ -21,29 +25,13 @@ public class ControladorGestionPedidos {
         this.crearMonitorPedidos();
     }
 
-    public void convertirPedidosEnViajes() throws NoVehiculoException, NoChoferException {
-        List<Pedido> pedidos = this.getPedidos();
-        Pedido pedido = null;
-        int i = 0;
-        while (i < pedidos.size()) {
-            pedido = pedidos.get(i);
-            ViajeFactory viajeFactory = new ViajeFactory();
-            IViaje viaje = viajeFactory.getViaje(pedido);
-            empresa.agregoViaje(viaje);
-            new VentanaViajeActual(viaje).setVisible(true);
-            empresa.aceptaPedido(pedido);
-            empresa.agregarInformacionAccionarHilos(viaje.getCliente().getUsuario()+ " ha solicitado un viaje.");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            this.asignarVehiculoHilo(viaje);
-            i++;
-        }
-    }
 
-
+    /**
+     * Asigna un vehículo a un viaje.
+     *
+     * @param viaje El viaje al que se le asignará un vehículo.
+     * @throws NoVehiculoException Si no hay vehículos disponibles.
+     */
     public synchronized void asignarVehiculo(IViaje viaje) throws NoVehiculoException {
         Vehiculo mejorVehiculo = null;
         empresa.agregarInformacionAccionarHilos("El viaje de " + viaje.getCliente().getUsuario()+ " está buscando vehículo.");
@@ -78,20 +66,11 @@ public class ControladorGestionPedidos {
         empresa.notificarCambios();
     }
 
-    public Map<Integer, Vehiculo> buscarVehiculosAptos(Pedido pedido) {
-        Map<Integer, Vehiculo> vehiculosCumplen = new TreeMap<>(Comparator.reverseOrder());
-        int i = 0;
-        Vehiculo vehiculo = null;
-        while (i < empresa.getVehiculos().size()) {
-            vehiculo = empresa.getVehiculos().get(i);
-            if (vehiculo.verificaPasajeros(pedido.getCantPersonas()) && vehiculo.verificaBaul(pedido.usoBaul()) && vehiculo.verificaMascota(pedido.getMascota())) {
-                vehiculosCumplen.put(vehiculo.getPrioridad(pedido), vehiculo);
-            }
-            i++;
-        }
-        return vehiculosCumplen;
-    }
 
+
+    /**
+     * Metodo que se encarga de crear un monitor para observar los pedidos y generar viajes.
+     */
     public void crearMonitorPedidos() {
         Runnable hiloCrearViaje = new MonitorPedidos(this);
         Thread hilo = new Thread(hiloCrearViaje);
@@ -102,6 +81,11 @@ public class ControladorGestionPedidos {
         return empresa.getPedidos();
     }
 
+    /**
+     * Metodo encargado de la creacion de un hilo para asignar un vehículo a un viaje.
+     *
+     * @param viaje El viaje al que se le asignará un vehículo.
+     */
     public void asignarVehiculoHilo(IViaje viaje) {
         Runnable vehiculoHilo = new CrearVehiculoHilo(this, viaje);
         Thread hilo = new Thread(vehiculoHilo);

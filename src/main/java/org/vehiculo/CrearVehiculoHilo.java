@@ -1,5 +1,6 @@
-package org.vista;
+package org.vehiculo;
 
+import org.controladores.ControladorGestionPedidos;
 import org.excepciones.NoVehiculoException;
 import org.viaje.IViaje;
 

@@ -1,16 +1,13 @@
 package org.vista;
 
-import org.excepciones.ViajeNoEncontradoException;
+import org.controladores.ControladorGestionPedidos;
 import org.sistema.Empresa;
-import org.usuario.Cliente;
 import org.viaje.IViaje;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 

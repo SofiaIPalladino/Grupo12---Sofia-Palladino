@@ -17,18 +17,17 @@ public class ChoferPermanente extends Chofer {
     private int cantHijos;
     private Date fechaIngreso;
 
+    /**
+     * Constructor necesario para la serialización.
+     */
 	public ChoferPermanente() {
-
 	}
 
     /**
      * Constructor para crear un ChoferPermanente.
      * @param dni El número de identificación del chofer.
      * @param nombre El nombre del chofer.
-     * @param sueldoBasico El sueldo básico del chofer permanente.
-     * @param plusXAntiguedad El porcentaje de aumento por antigüedad.
-     * @param plusXHijos El porcentaje de aumento por cantidad de hijos.
-     * @param aportes El porcentaje de descuento por aportes jubilatorios.
+     * @param cantHijos Cantidad de hijos que tiene el chofer.
      * @param fechaIngreso La fecha de ingreso del chofer a la empresa.
      */
     public ChoferPermanente(String dni, String nombre, int cantHijos, Date fechaIngreso) {
@@ -54,41 +53,10 @@ public class ChoferPermanente extends Chofer {
         return sueldo;
     }
 
-	public double getPlusXAntiguedad() {
-		return plusXAntiguedad;
-	}
-
-	public void setPlusXAntiguedad(double plusXAntiguedad) {
-		this.plusXAntiguedad = plusXAntiguedad;
-	}
-
-	public double getPlusXHijos() {
-		return plusXHijos;
-	}
-
-	public void setPlusXHijos(double plusXHijos) {
-		this.plusXHijos = plusXHijos;
-	}
-
-	public double getAportes() {
-		return aportes;
-	}
-
-	public void setAportes(double aportes) {
-		this.aportes = aportes;
-	}
-
-	public Date getFechaIngreso() {
-		return fechaIngreso;
-	}
-
-	public void setFechaIngreso(Date fechaIngreso) {
-		this.fechaIngreso = fechaIngreso;
-	}
-
-	public double getSueldoBasico() {
-		return sueldoBasico;
-	}
+	/**
+	 * Metodo para obtener la antiguedad del chofer en años
+	 * @return los años que el chofer tiene en la empresa
+	 */
 
 	public int getAntiguedad() {
 		Date ahora = new Date();

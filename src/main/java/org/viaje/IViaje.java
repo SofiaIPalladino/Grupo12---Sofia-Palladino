@@ -28,6 +28,6 @@ public interface IViaje extends Comparable<IViaje>,Cloneable{
     String getMascota();
     String getEquipaje();
     int getCantidadPersonas();
-
+    public Object clone() throws CloneNotSupportedException;
 
 }

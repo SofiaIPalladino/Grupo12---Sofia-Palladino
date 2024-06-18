@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Clase que modela las caracteristicas de un pedido.<br>
+ * Clase que implementa Serializable y Cloneable y modela las caracteristicas de un pedido.<br>
  */
 public class Pedido implements Serializable,Cloneable{
 	private Date  fecha;
@@ -23,7 +23,6 @@ public class Pedido implements Serializable,Cloneable{
 	}
 	/**
 	 * Construye un objeto de tipo Pedido.<br>
-	 * @param fecha: fecha de realizacion del pedido.<br>
 	 * @param zona: zona en donde se efectuara el viaje.<br>
 	 * @param mascota: valor booleano correspondiente al transporte de mascota.<br>
 	 * @param equipaje: tipo de equipaje. <br>
@@ -77,6 +76,12 @@ public class Pedido implements Serializable,Cloneable{
 	
 	public Cliente getCliente() {return this.cliente;}
 
+	/**
+	 * Metodo que crea y devuelve una copia superficial del objeto actual.
+	 *
+	 * @return Una copia superficial del objeto actual.
+	 * @throws CloneNotSupportedException si el objeto no puede clonarse.
+	 */
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}

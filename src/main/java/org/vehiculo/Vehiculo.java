@@ -20,10 +20,10 @@ public abstract class Vehiculo implements Serializable {
 	protected boolean petFriendly;
 	protected boolean baul;
 
-
-
+	/**
+	 * Constructor necesario para la serialización.
+	 */
 	public Vehiculo(){
-
 	}
 
 	public Vehiculo(String numpatente,int cantmaxpas, boolean petfriendly, boolean baul) {
@@ -70,36 +70,18 @@ public abstract class Vehiculo implements Serializable {
 	 * @param cantPasajeros La cantidad de pasajeros del pedido.
 	 * @return un boolean.
 	 */
-	public boolean verificaPasajeros(int cantPasajeros){
-		if (cantPasajeros <= this.cantMaxPas)
-			return true;
-		else
-			return false;
-	}
+	public abstract boolean verificaPasajeros(int cantPasajeros);
 	/**
-	 * Determina si el vehículo cumple con la condicion de baul del pedido.
-	 * Si el pedido NO necesita baúl(baul = false) entrará por la rama del if y devolverá true ya que al no necesitar baúl cualquier vehículo cumplirá.
-	 * Si el pedido SI necesita baúl(baul = true) entrará por la rama del else y devolverá true o false dependiendo de si el vehículo determinado tiene esta característica.
-	 * 
-	 * @param cantPasajeros La cantidad de pasajeros del pedido.
+	 * Metodo que verifica si el vehículo cumple con la condicion de baul del pedido.
 	 * @return un boolean.
 	 */
-	public boolean verificaBaul(boolean baul) {
-		if(!baul) {
-			return true;
-		}else
-			return this.baul;
-	}
+	public abstract boolean verificaBaul(boolean baul);
+
 	/**
-	 * idem verificaBaul
+	 * Metodo que verifica si el vehiculo cumple con la condicion de mascota del pedido.
 	 */
-	public boolean verificaMascota(boolean mascota) {
-		if(!mascota) {
-			return true;
-		}else
-			return this.petFriendly;
-	}
-	
+	public abstract boolean verificaMascota(boolean mascota);
+
 	/**
 	 * Método abstracto que se encarga de calcular la calificación de prioridad que devolverá el vehículo.
 	 * @param pideBaul Informa si el pedido es con baúl o no.
@@ -108,25 +90,9 @@ public abstract class Vehiculo implements Serializable {
 	 */
 	protected abstract int califica(boolean pideBaul, int cantPax);
 
+	//corregir mas adelante
 	public String getNumpatente() {
-		return numpatente;
+		return null;
 	}
-
-	public void setNumpatente(String numpatente) {
-		this.numpatente = numpatente;
-	}
-
-	public int getCantMaxPas() {
-		return cantMaxPas;
-	}
-
-	public boolean isPetFriendly() {
-		return petFriendly;
-	}
-
-	public boolean isBaul() {
-		return baul;
-	}
-
 
 }

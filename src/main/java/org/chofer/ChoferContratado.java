@@ -16,7 +16,6 @@ public class ChoferContratado extends Chofer {
      * Constructor para crear un ChoferContratado.
      * @param dni El número de identificación del chofer.
      * @param nombre El nombre del chofer.
-     * @param gananciaXViaje La ganancia por cada viaje realizado por el chofer contratado.
      */
 	public ChoferContratado(String dni, String nombre) {
 		super(dni, nombre);

@@ -1,8 +1,12 @@
-package org.vista;
+package org.monitor;
 
+import org.controladores.ControladorGestionPedidos;
 import org.excepciones.NoChoferException;
 import org.excepciones.NoVehiculoException;
 
+/**
+ * Clase que implementa Runnable y se encarga de monitorear y convertir pedidos en viajes.
+ */
 public class MonitorPedidos implements Runnable {
     private ControladorGestionPedidos controlador;
 
@@ -10,6 +14,11 @@ public class MonitorPedidos implements Runnable {
         this.controlador = controlador;
     }
 
+    /**
+     * Método run que se ejecuta en un hilo separado.
+     * Monitorea continuamente los pedidos y los convierte en viajes si hay pedidos pendientes.
+     *
+     */
     @Override
     public void run() {
         while (true) {

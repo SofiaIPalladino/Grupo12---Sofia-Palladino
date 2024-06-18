@@ -1,5 +1,6 @@
 package org.vista;
 
+import org.controladores.ControladorVentanaRegistro;
 import org.excepciones.UsuarioExistenteException;
 
 import javax.swing.*;

@@ -11,9 +11,16 @@ import java.util.List;
 public class GestionPagoChoferes {
 	
 	Empresa e=Empresa.getInstance();
-	
+
+	/**
+	 * Calcula y muestra los pagos que se deben realizar a los choferes.
+	 * Solo los usuarios de tipo Administrador tienen permisos para realizar esta acción.
+	 *
+	 * @param usuario El usuario que intenta realizar el cálculo de pagos.
+	 */
+
 	public void calculoPagoChoferes(Usuario usuario) {
-		if (usuario.getClass().equals(Administrador.class)) {
+		if (usuario.getClass().equals(Administrador.class)) {  //comprueba que el usuario sea un administrador
 			double sueldo=0;
 			double totalsueldos=0;
 			Chofer choferaux=null;

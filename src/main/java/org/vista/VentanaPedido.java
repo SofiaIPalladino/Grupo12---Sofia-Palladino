@@ -1,12 +1,12 @@
 package org.vista;
 
+import org.controladores.ControladorPedido;
 import org.excepciones.NoChoferException;
 import org.excepciones.NoVehiculoException;
 import org.pedido.Pedido;
 import org.sistema.Empresa;
 import org.usuario.Cliente;
 import org.viaje.IViaje;
-import org.viaje.Viaje;
 
 import javax.swing.*;
 import java.awt.*;

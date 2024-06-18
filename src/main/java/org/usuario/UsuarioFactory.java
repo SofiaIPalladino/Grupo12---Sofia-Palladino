@@ -1,10 +1,11 @@
 
 package org.usuario;
 public class UsuarioFactory {
-	public Usuario crea(Usuario usuario) {
-		if (usuario.getClass().equals(Administrador.class))
-			return new Administrador(usuario);
+
+	public Usuario crea(String usuario, String contrasenia, String nombre, String apellido,boolean admin) {
+		if (admin)
+			return new Administrador(usuario, contrasenia, nombre, apellido);
 		else
-			return new Cliente(usuario);
+			return new Cliente(usuario, contrasenia, nombre, apellido);
 	}
 }

@@ -123,7 +123,7 @@ public abstract class Viaje implements IViaje, Serializable {
 	}
 
 	/**
-	 * Este metodo abstracto calculara el costo del viaje dependiento del tipo de viaje.<br>
+	 * Este metodo calculara el costo del viaje dependiento del tipo de viaje.<br>
 	 */
 	public abstract double getCosto();
 	
@@ -138,7 +138,6 @@ public abstract class Viaje implements IViaje, Serializable {
 			vehiculo = "Vehiculo Sin Asignar";
 		else
 			vehiculo = this.getVehiculo().getNumpatente() + "," + this.getVehiculo().getTipo();
-		//return "////////////Estado:" + status + " - Cliente:" + cliente.getUsuario() + " - Chofer:" + chofer +" - Vehiculo:"+ vehiculo + " - Distancia:" + distanciaReal + " km - Costo:$ " + this.getCosto();
 		return fecha.getHours() + ":"+fecha.getMinutes() + " - " + fecha.getDate() +"/"+  (fecha.getMonth()+1) +"/"+  (fecha.getYear() + 1900);
 
 	}
@@ -152,11 +151,10 @@ public abstract class Viaje implements IViaje, Serializable {
 		return rta;
 	}
 
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
 		Viaje clon= (Viaje) super.clone();
 		clon.pedido = (Pedido) this.pedido.clone();
 		return clon;
 	}
-
 
 }
