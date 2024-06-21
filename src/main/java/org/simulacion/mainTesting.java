@@ -1,7 +1,7 @@
 package org.simulacion;
 
-import org.Hilos.HiloChofer;
-import org.Hilos.HiloCliente;
+import org.hilos.HiloChofer;
+import org.hilos.HiloCliente;
 import org.chofer.Chofer;
 import org.chofer.ChoferContratado;
 import org.chofer.ChoferPermanente;

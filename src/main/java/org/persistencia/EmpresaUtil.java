@@ -37,8 +37,6 @@ public class EmpresaUtil {
         e.setChoferesEnUso(dto.getChoferesEnUso());
         e.setVehiculos(dto.getVehiculos());
         e.setVehiculosEnUso(dto.getVehiculosEnUso());
-        e.setViajes(dto.getViajes());
-        e.setPedidos(dto.getPedidos());
         e.setRecaudado(dto.getRecaudado());
     }
 }

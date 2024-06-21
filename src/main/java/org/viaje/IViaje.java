@@ -7,11 +7,12 @@ import org.usuario.Cliente;
 import org.vehiculo.Vehiculo;
 
 import java.util.Date;
+import java.util.Observable;
 
 /**
  * Interfaz que modela una parte del comportamiento de los viajes.<br>
  */
-public interface IViaje extends Comparable<IViaje>,Cloneable{
+public interface IViaje extends Comparable<IViaje>{
 
     Vehiculo getVehiculo();
     void setVehiculo(Vehiculo vehiculo);
@@ -28,6 +29,11 @@ public interface IViaje extends Comparable<IViaje>,Cloneable{
     String getMascota();
     String getEquipaje();
     int getCantidadPersonas();
+    void iniciarViaje(Chofer chofer);
+    void asignarVehiculo(Vehiculo vehiculo);
+    void pagarViaje();
+    void finalizarViaje();
     public Object clone() throws CloneNotSupportedException;
 
+    
 }

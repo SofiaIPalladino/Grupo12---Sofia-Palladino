@@ -8,11 +8,12 @@ import org.vehiculo.Vehiculo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Observable;
 
 /**
  * Clase abstracta que modela las caracteristicas y el comportamoiento de los viajes.<br>
  */
-public abstract class Viaje implements IViaje, Serializable {
+public abstract class Viaje extends Observable implements IViaje, Serializable {
 	
 	protected String status;
 	protected Pedido pedido;
@@ -31,14 +32,12 @@ public abstract class Viaje implements IViaje, Serializable {
 		this.pedido=pedido;
 		this.chofer=null;
 		this.vehiculo=null;
-		this.status="solicitado";
 		this.fecha = new Date();
 		this.distanciaReal=pedido.getDistancia();
 		this.cliente=pedido.getCliente();
-		
+		this.setStatus("Solicitado");
 	}
 
-	
     /**
      * Este metodo setea el atributo distanciaReal con el valor recibido como parametro.<br>
      * <br> Precondicion: parametro mayor a 0.<br>
@@ -70,6 +69,7 @@ public abstract class Viaje implements IViaje, Serializable {
 
 
 	public void setVehiculo(Vehiculo vehiculo) {
+
 		this.vehiculo = vehiculo;
 	}
 
@@ -85,9 +85,10 @@ public abstract class Viaje implements IViaje, Serializable {
 		return this.chofer;
 	}
 
-	public void setStatus(String s) {
+	public synchronized void setStatus(String s) {
 		this.status=s;
-		
+		setChanged();
+		notifyObservers();
 	}
 
 	public String getStatus() {
@@ -123,10 +124,11 @@ public abstract class Viaje implements IViaje, Serializable {
 	}
 
 	/**
-	 * Este metodo calculara el costo del viaje dependiento del tipo de viaje.<br>
+	 * Este metodo abstracto calculara el costo del viaje dependiento del tipo de viaje.<br>
 	 */
 	public abstract double getCosto();
-	
+
+	@Override
 	public String toString() {
 		String vehiculo;
 		String chofer;
@@ -138,10 +140,11 @@ public abstract class Viaje implements IViaje, Serializable {
 			vehiculo = "Vehiculo Sin Asignar";
 		else
 			vehiculo = this.getVehiculo().getNumpatente() + "," + this.getVehiculo().getTipo();
+		//return "////////////Estado:" + status + " - Cliente:" + cliente.getUsuario() + " - Chofer:" + chofer +" - Vehiculo:"+ vehiculo + " - Distancia:" + distanciaReal + " km - Costo:$ " + this.getCosto();
 		return fecha.getHours() + ":"+fecha.getMinutes() + " - " + fecha.getDate() +"/"+  (fecha.getMonth()+1) +"/"+  (fecha.getYear() + 1900);
 
 	}
-
+	@Override
 	public int compareTo(IViaje viaje) {
 		int rta = 0;
 		if (getCosto() < viaje.getCosto())
@@ -151,10 +154,32 @@ public abstract class Viaje implements IViaje, Serializable {
 		return rta;
 	}
 
+	public synchronized void iniciarViaje(Chofer chofer) {
+		this.setChofer(chofer);
+		this.setStatus("Iniciado");
+		System.out.println("CAMBIO ESTADO A INICIADO");
+	}
+
+	public synchronized void asignarVehiculo(Vehiculo vehiculo){
+		this.setVehiculo(vehiculo);
+		this.setStatus("Con Vehículo");
+		System.out.println("CAMBIO ESTADO A CON VEHÍCULO");
+	}
+
+	public synchronized void pagarViaje() {
+		this.setStatus("Pagado");
+		System.out.println("CAMBIO ESTADO A PAGADO");
+	}
+
+	public synchronized void finalizarViaje() {
+		this.setStatus("Finalizado");
+		System.out.println("CAMBIO ESTADO A FINALIZADO");
+	}
+	
+	
 	public Object clone() throws CloneNotSupportedException {
 		Viaje clon= (Viaje) super.clone();
 		clon.pedido = (Pedido) this.pedido.clone();
 		return clon;
 	}
-
 }

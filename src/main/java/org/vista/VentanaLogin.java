@@ -15,22 +15,28 @@ public class VentanaLogin extends JFrame {
     private ControladorVentanaLogin controlador;
 
     public VentanaLogin() {
+        // Configuración de la ventana
         setTitle("Login");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(false);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
+        setResizable(false); // Evitar que la ventana sea redimensionable
 
 
+        // Inicializar el controlador
         controlador = new ControladorVentanaLogin();
 
+        // Creación del panel principal
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(null);
+        mainPanel.setLayout(null); // Usar Layout nulo para posicionar manualmente los componentes
 
+
+        // Etiqueta de título
         JLabel titleLabel = new JLabel("LOGIN", SwingConstants.CENTER);
-        titleLabel.setBounds(150, 20, 100, 30);
+        titleLabel.setBounds(150, 20, 100, 30); // Posición y tamaño de la etiqueta
         mainPanel.add(titleLabel);
 
+        // Agregar campos de ejemplo
         JLabel userLabel = new JLabel("USUARIO:");
         userLabel.setBounds(50, 70, 100, 30);
         mainPanel.add(userLabel);
@@ -41,7 +47,7 @@ public class VentanaLogin extends JFrame {
 
         // Botón Ingresar
         JButton verificausuarioButton = new JButton("Verificar Usuario");
-        verificausuarioButton.setBounds(150, 110, 140, 25);
+        verificausuarioButton.setBounds(150, 110, 140, 25); // Posición y tamaño del botón
         verificausuarioButton.setEnabled(false);
         mainPanel.add(verificausuarioButton);
 
@@ -54,11 +60,13 @@ public class VentanaLogin extends JFrame {
         campoContrasenia.setEnabled(false);
         mainPanel.add(campoContrasenia);
 
+        // Botón Ingresar
         JButton loginButton = new JButton("INGRESAR");
         loginButton.setBounds(150, 200, 100, 30); // Posición y tamaño del botón
         loginButton.setEnabled(false);
         mainPanel.add(loginButton);
 
+        // Agregar ActionListener para el botón de verificar usuario
         verificausuarioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,14 +75,15 @@ public class VentanaLogin extends JFrame {
                     JOptionPane.showMessageDialog(null, "Usuario verificado. Por favor, ingrese la contraseña.");
                     campoContrasenia.setEnabled(true);
                     loginButton.setEnabled(true);
-                    campoUsuario.setEnabled(false);
-                    verificausuarioButton.setEnabled(false);
+                    campoUsuario.setEnabled(false); // Deshabilitar el campo de usuario después de la verificación
+                    verificausuarioButton.setEnabled(false); // Deshabilitar el botón de verificar usuario
                 } else {
                     JOptionPane.showMessageDialog(null, "El usuario no existe.");
                 }
             }
         });
 
+        // Agregar ActionListener para el botón de login
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,6 +101,8 @@ public class VentanaLogin extends JFrame {
                 }
             }
         });
+        
+        // Añadir listener para habilitar el botón verificar cuando se ingrese texto en el campo usuario
         campoUsuario.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -111,4 +122,6 @@ public class VentanaLogin extends JFrame {
         });
         add(mainPanel);
     }
+
+
 }

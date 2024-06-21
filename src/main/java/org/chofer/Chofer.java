@@ -1,19 +1,16 @@
 package org.chofer;
 
-import org.excepciones.MaximoChoferesTipoException;
-import org.excepciones.NoChoferException;
-import org.sistema.Empresa;
 import org.viaje.IViaje;
-import org.vista.VentanaChofer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Clase abstracta que representa a un chofer de la empresa.
  * Esta clase define las características comunes para todos los choferes y declara un método abstracto para obtener el sueldo.
  */
-public abstract class Chofer implements Serializable {
+public abstract class Chofer implements Serializable{
 
     protected String dni;
     protected String nombre;
@@ -23,9 +20,6 @@ public abstract class Chofer implements Serializable {
     protected double km = 0;
     protected String estado = "Libre";
 
-    /**
-     * Constructor necesario para la serialización.
-     */
     public Chofer() {
 
     }
@@ -48,10 +42,6 @@ public abstract class Chofer implements Serializable {
      * @return El sueldo del chofer.
      */
     public abstract double getSueldo();
-
-    /**
-     * Getters y Setters de la clase
-     */
 
     public String getDni() {
         return dni;
@@ -97,32 +87,19 @@ public abstract class Chofer implements Serializable {
         return km;
     }
 
+    public int getCantidadDeViajes() {
+        return cantidadDeViajes;
+    }
 
-    /**
-     * Establece el estado del chofer.
-     *
-     * @param estado El estado a establecer.
-     */
-    public synchronized void setEstado(String estado) {
+    public void setCantidadDeViajes(int cantidadDeViajes) {
+        this.cantidadDeViajes = cantidadDeViajes;
+    }
+
+    public void recibePago() {
+
+    }
+    public void setEstado(String estado) {
         this.estado = estado;
-        Empresa empresa = Empresa.getInstance();
-        empresa.notificarCambios();
-        notifyAll(); // Notifica a los hilos en espera cuando cambia el estado
-    }
-
-    /**
-     * Finaliza el viaje asignado al chofer.
-     *
-     * @param viaje El viaje a finalizar.
-     */
-    public void finalizarViaje(IViaje viaje) {
-        viaje.setStatus("Finalizado");
-        Empresa empresa = Empresa.getInstance();
-        empresa.finalizarViaje(viaje);
-        this.setEstado("Libre"); // Cambia el estado a Libre cuando el viaje finaliza
-    }
-
-    public String getEstado() {
-        return estado;
+        //notifyAll();
     }
 }

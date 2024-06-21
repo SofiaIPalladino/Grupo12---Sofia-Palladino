@@ -4,7 +4,6 @@ import org.controladores.ControladorPedido;
 import org.excepciones.NoChoferException;
 import org.excepciones.NoVehiculoException;
 import org.pedido.Pedido;
-import org.sistema.Empresa;
 import org.usuario.Cliente;
 import org.viaje.IViaje;
 
@@ -26,6 +25,7 @@ public class VentanaPedido extends JFrame {
     private Cliente cliente;
 
     public VentanaPedido(Cliente cliente) {
+        // Configuración de la ventana
         setTitle("Ingresar Pedido");
         setSize(500, 400); // Tamaño de la ventana
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -33,10 +33,8 @@ public class VentanaPedido extends JFrame {
         this.cliente = cliente;
         controlador = new ControladorPedido();
 
-        // Configuración del layout
         setLayout(new GridLayout(7, 2, 10, 10));
 
-        // Campos del pedido
         add(new JLabel("Zona:"));
         zonaComboBox = new JComboBox<>(new String[]{"Calle sin asfaltar", "Zona Estandar", "Zona Peligrosa"});
         add(zonaComboBox);
@@ -68,11 +66,6 @@ public class VentanaPedido extends JFrame {
         btnGuardarPedido.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(cliente.getCantidadViajes());
-                if (cliente.getCantidadViajes() == Empresa.getInstance().getCantidadMaximaSolicitudesPorCliente()) {
-                    JOptionPane.showMessageDialog(null, "El cliente ha alcanzado el límite de solicitudes y no puede solicitar más viajes.");
-                    return;
-                }
                 String zona = (String) zonaComboBox.getSelectedItem();
                 boolean mascota = mascotaCheckBox.isSelected();
                 boolean equipaje = equipajeCheckBox.isSelected();
@@ -101,7 +94,7 @@ public class VentanaPedido extends JFrame {
 
                 Pedido pedido = new Pedido(zona, mascota, equipaje ? "Baul" : "No Baul", cantPersonas, cliente, distancia);
                 try {
-                    controlador.evaluaPedido(pedido);
+                    controlador.evaluarPedido(pedido);
                 } catch (NoVehiculoException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage());
                     return;
@@ -110,10 +103,11 @@ public class VentanaPedido extends JFrame {
                     return;
                 }
                 JOptionPane.showMessageDialog(null, "Pedido guardado exitosamente!");
-                cliente.sumarViaje();
+                controlador.convertirPedidoEnViaje(pedido);
                 dispose();
             }
         });
+
 
         btnHistorialViajes.addActionListener(new ActionListener() {
             @Override

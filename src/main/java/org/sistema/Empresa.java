@@ -2,31 +2,36 @@ package org.sistema;
 
 
 import org.chofer.Chofer;
-import org.chofer.ChoferContratado;
-import org.excepciones.*;
+import org.controladores.ControladorGestionPedidos;
+import org.controladores.ControladorVentanaChofer;
+import org.controladores.ControladorViajeActual;
+import org.excepciones.NoChoferException;
+import org.excepciones.NoVehiculoException;
+import org.excepciones.UsuarioExistenteException;
+import org.excepciones.ViajeNoEncontradoException;
+import org.pedido.GestionPedidos;
+import org.pedido.Pedido;
 import org.usuario.Administrador;
 import org.usuario.Cliente;
 import org.usuario.Usuario;
+import org.usuario.UsuarioFactory;
 import org.vehiculo.Vehiculo;
+import org.viaje.GestionViajes;
 import org.viaje.IViaje;
+import org.viaje.Viaje;
+
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 
-/**
- * La clase Empresa representa la entidad principal del sistema, que gestiona
- * los clientes, usuarios, choferes, vehículos, pedidos y viajes.
- * Esta clase sigue el patrón Singleton para garantizar que solo haya una
- * instancia de la empresa en el sistema y para que pueda ser accedida desde cualquier parte del codigo.
- */
 
 public class Empresa extends Observable {
 
     private static Empresa instance = null;
     private List<Cliente> clientes;
-    private List<Administrador> admins;
+    private List<Usuario> usuarios;
 
     private List<Chofer> choferes;
     private List<Chofer> choferesEnUso;
@@ -34,27 +39,30 @@ public class Empresa extends Observable {
     private List<Vehiculo> vehiculos;
     private List<Vehiculo> vehiculosEnUso;
 
-    private List<IViaje> viajes;
     private List<IViaje> viajesSinChoferes;
-
+    private GestionViajes gestionViajes;
+    private GestionPedidos gestionPedidos;
 
     private double recaudado = 0;
-    private int cantidadMaximaSolicitudesPorCliente;
-    private int cantidadMaximaChoferesTipo;
-    private int cantidadMaximaSolicitudesPorChofer;
 
-    private StringBuilder informacionAccionarHilos = new StringBuilder("");
+
+
+    private String usuariolog;
 
 
     private Empresa() {
-        viajes = new ArrayList<IViaje>();
+        //viajes = new ArrayList<IViaje>();
         vehiculosEnUso = new ArrayList<Vehiculo>();
         vehiculos = new ArrayList<Vehiculo>();
         choferes = new ArrayList<Chofer>();
         choferesEnUso = new ArrayList<Chofer>();
         clientes = new ArrayList<Cliente>();
-        admins = new ArrayList<Administrador>();
+        usuarios = new ArrayList<Usuario>();
+        //pedidos = new ArrayList<Pedido>();
         viajesSinChoferes = new ArrayList<IViaje>();
+        gestionViajes = new GestionViajes(this);
+        gestionPedidos = new GestionPedidos(this);
+        new ControladorGestionPedidos(this);
     }
 
     public static synchronized Empresa getInstance() {
@@ -63,44 +71,19 @@ public class Empresa extends Observable {
         return instance;
     }
 
-    /**
-     * Metodo que se encarga de obtiene la información generada por los hilos de acción en la empresa.
-     *
-     * @return Un StringBuilder que contiene la información generada por los hilos de acción.
-     */
-    public StringBuilder getInformacionAccionarHilos() {
-        return informacionAccionarHilos;
-    }
-
-    public void agregarInformacionAccionarHilos(String informacionAccionarHilos) {
-        this.informacionAccionarHilos.append(informacionAccionarHilos).append("\n");
-    }
-
-    public void setCantidadMaximaSolicitudesPorCliente(int cantidadMaximaSolicitudesPorCliente) {
-        this.cantidadMaximaSolicitudesPorCliente = (int) (Math.random() * cantidadMaximaSolicitudesPorCliente) + 1;
-    }
-
-    public int getCantidadMaximaSolicitudesPorCliente() {
-        return this.cantidadMaximaSolicitudesPorCliente;
-    }
-
-    public void setCantidadMaximaSolicitudesPorChofer(int cantidadMaximaSolicitudesPorChofer) {
-        this.cantidadMaximaSolicitudesPorChofer = (int) (Math.random() * cantidadMaximaSolicitudesPorChofer) + 1;
-    }
-
-    public int getCantidadMaximaSolicitudesPorChofer() {
-        return this.cantidadMaximaSolicitudesPorChofer;
-    }
-
     public synchronized List<IViaje> getViajesSinChoferes() {
         return viajesSinChoferes;
+    }
+
+    public List<IViaje> getViajesChofer(Chofer chofer){
+        return gestionViajes.getViajesChofer(chofer);
     }
 
     public void setViajesSinChoferes(IViaje viajeSinChofer) {
         this.viajesSinChoferes.add(viajeSinChofer);
     }
 
-    public List<Cliente> getClientes() {
+    public synchronized List<Cliente> getClientes() {
         return clientes;
     }
 
@@ -112,8 +95,16 @@ public class Empresa extends Observable {
         return vehiculos;
     }
 
+    public void setUsuariolog(String usuariolog) {
+        this.usuariolog = usuariolog;
+    }
+
     public List<Chofer> getChoferesEnUso() {
         return choferesEnUso;
+    }
+
+    public List<Usuario> getUsuario() {
+        return usuarios;
     }
 
 
@@ -122,9 +113,12 @@ public class Empresa extends Observable {
     }
 
     public synchronized List<IViaje> getViajes() {
-        return viajes;
+        return gestionViajes.getViajes();
     }
 
+    public synchronized List<IViaje> getViajesClienteFinalizados(Cliente cliente) {
+        return gestionViajes.getViajesClienteFinalizados(cliente);
+    }
 
     public double getRecaudado() {
         return recaudado;
@@ -134,15 +128,17 @@ public class Empresa extends Observable {
         this.recaudado += monto;
     }
 
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
 
     public void setRecaudado(double recaudado) {
         this.recaudado = recaudado;
     }
 
+    //public void setPedidos(List<Pedido> pedidos) {this.pedidos = pedidos;}
 
-    public void setViajes(List<IViaje> viajes) {
-        this.viajes = viajes;
-    }
+    //public void setViajes(List<IViaje> viajes) {this.viajes = viajes;}
 
     public void setVehiculosEnUso(List<Vehiculo> vehiculosEnUso) {
         this.vehiculosEnUso = vehiculosEnUso;
@@ -160,8 +156,8 @@ public class Empresa extends Observable {
         this.choferes = choferes;
     }
 
-    public void setAdmins(List<Administrador> admins) {
-        this.admins = admins;
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 
     public void setClientes(List<Cliente> clientes) {
@@ -172,47 +168,65 @@ public class Empresa extends Observable {
         Empresa.instance = instance;
     }
 
-    public void setChoferConViaje(Chofer c){
+    public void setChoferConViaje(Chofer c) throws NoChoferException {
         this.choferesEnUso.add(c);
-        this.choferes.remove(c);
     }
 
-    public void setChoferDisponible(Chofer c)  {
-        this.choferesEnUso.remove(c);
-        this.choferes.add(c);
+    public void setChoferDisponible(Chofer c) throws NoChoferException {
+        if (!choferesEnUso.remove(c))
+            throw new NoChoferException("El chofer seleccionado no esta en uso");
     }
 
-    public void setVehiculoConViaje(Vehiculo v) {
+
+    public synchronized void setVehiculoConViaje(Vehiculo v) throws NoVehiculoException {
         this.vehiculosEnUso.add(v);
-        this.vehiculos.remove(v);
     }
 
-    public void setVehiculoDisponible(Vehiculo v) {
-        this.vehiculosEnUso.remove(v);
+    public void setVehiculoDisponible(Vehiculo v) throws NoVehiculoException {
+        if (!vehiculosEnUso.remove(v))
+            throw new NoVehiculoException("El vehiculo seleccionado no esta en uso");
         this.vehiculos.add(v);
     }
 
-    public void agregaVehiculo(Vehiculo v) {
+    public synchronized List<Pedido> getPedidos() {
+        return gestionPedidos.getPedidos();
+    }
+
+    public synchronized void agregaChofer(Chofer c) {
+        this.choferes.add(c);
+        new ControladorVentanaChofer(this,c);
+    }
+
+    public synchronized void agregaVehiculo(Vehiculo v) {
         this.vehiculos.add(v);
     }
 
-    public int getCantidadMaximaChoferesTipo() {
-        return cantidadMaximaChoferesTipo;
+    public synchronized void pagarViaje(IViaje viaje) throws ViajeNoEncontradoException {
+        gestionViajes.pagarViaje(viaje);
     }
 
-    public void setCantidadMaximaChoferesTipo(int cantidadMaximaChoferesTipo) {
-        this.cantidadMaximaChoferesTipo = cantidadMaximaChoferesTipo;
+    public void notificarCambios(IViaje viaje) {
+        setChanged();
+        notifyObservers(viaje);
     }
 
-    public void agregaUsuario(Usuario usuario){
-        if (usuario.getClass().equals(Cliente.class))
-            this.clientes.add((Cliente) usuario);
-        else
-            this.admins.add((Administrador) usuario);
-
+    public GestionViajes getGestionViajes() {
+        return gestionViajes;
     }
+
+
+    ///todo: GESTIÓN DE PEDIDOS
+
+    public GestionPedidos getGestionPedidos() {
+        return gestionPedidos;
+    }
+
+
+    public void evaluarPedido(Pedido p) throws NoVehiculoException, NoChoferException {
+        gestionPedidos.evaluarPedido(p);
+    }
+
 }
-
 
 	
 	

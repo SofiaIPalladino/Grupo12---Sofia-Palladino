@@ -19,10 +19,10 @@ public class VentanaViajesFinalizados extends JFrame {
         setResizable(false);
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(null);
+        mainPanel.setLayout(null); // Usar Layout nulo para posicionar manualmente los componentes
 
         JLabel titleLabel = new JLabel("HISTORIAL VIAJES FINALIZADOS", SwingConstants.CENTER);
-        titleLabel.setBounds(50, 20, 300, 30);
+        titleLabel.setBounds(50, 20, 300, 30); // Posición y tamaño de la etiqueta
         mainPanel.add(titleLabel);
 
         JComboBox<IViaje> comboBox = new JComboBox<>(viajes.toArray(new IViaje[0]));
@@ -35,11 +35,11 @@ public class VentanaViajesFinalizados extends JFrame {
         int yPosition = 100;
         for (int i = 0; i < labels.length; i++) {
             JLabel jLabel = new JLabel(labels[i] + ":");
-            jLabel.setBounds(50, yPosition, 150, 30);
+            jLabel.setBounds(50, yPosition, 150, 30); // Posición y tamaño de la etiqueta
             mainPanel.add(jLabel);
 
             JTextField textField = new JTextField();
-            textField.setBounds(200, yPosition, 150, 30);
+            textField.setBounds(200, yPosition, 150, 30); // Posición y tamaño del campo de texto
             textField.setEditable(false);
             mainPanel.add(textField);
             textFields[i] = textField;
@@ -47,9 +47,8 @@ public class VentanaViajesFinalizados extends JFrame {
             yPosition += 30;
         }
 
-        // Botón Cerrar
         JButton closeButton = new JButton("CERRAR");
-        closeButton.setBounds(150, 400, 100, 30);
+        closeButton.setBounds(150, 400, 100, 30); // Posición y tamaño del botón
         closeButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {

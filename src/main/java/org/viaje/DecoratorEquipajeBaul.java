@@ -1,8 +1,8 @@
 package org.viaje;
 
-
 import org.chofer.Chofer;
 import org.pedido.Pedido;
+import org.vehiculo.Vehiculo;
 
 /**
  * Clase concreta que modela el comportamiento de los viajes con equipaje en baul.<br>
@@ -32,6 +32,30 @@ public class DecoratorEquipajeBaul extends DecoratorViajes {
 	@Override
 	public Pedido getPedido() {
 		return this.encapsulado.getPedido();
+	}
+
+	@Override
+	public void iniciarViaje(Chofer chofer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void asignarVehiculo(Vehiculo vehiculo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pagarViaje() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void finalizarViaje() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

@@ -1,62 +1,69 @@
-package org.Hilos;
+package org.hilos;
 
 import org.chofer.Chofer;
-import org.excepciones.MaximoChoferesTipoException;
-import org.excepciones.NoChoferException;
-import org.excepciones.ViajeNoEncontradoException;
-import org.sistema.Empresa;
+import org.viaje.GestionViajes;
+import org.viaje.GestionViajes;
 import org.viaje.IViaje;
-import org.vista.VentanaChofer;
 
-public class HiloChofer implements Runnable {
+public class HiloChofer extends Thread {
+    private Chofer chofer;
+    private GestionViajes gestionViajes;
 
-    private final Chofer chofer;
-    private IViaje viaje;
-
-    public HiloChofer(Chofer chofer) {
+    public HiloChofer(Chofer chofer, GestionViajes gestorViajes) {
         this.chofer = chofer;
+        this.gestionViajes = gestorViajes;
     }
 
+    @Override
     public void run() {
-        Empresa empresa = Empresa.getInstance();
-        boolean ejecutar = true;
         try {
-            empresa.agregaChofer(this.chofer);
-            empresa.agregarInformacionAccionarHilos("El chofer " + this.chofer.getNombre() + " comenzó a trabajar.");
-            while (ejecutar) {
-                synchronized (empresa.getViajesSinChoferes()) {
-                    while (this.chofer.getEstado().equals("Libre") && empresa.getViajesSinChoferes().isEmpty()) {
-                        empresa.getViajesSinChoferes().wait();
-                    }
-                    if (!empresa.getViajesSinChoferes().isEmpty()) {
-                        this.viaje = empresa.buscarViaje(chofer);
-                    }
+            while (true) {
+                IViaje viaje = gestionViajes.obtenerViajeConVehiculo(chofer);
+                synchronized (viaje) {
+                    chofer.setEstado("Ocupado");
+                    Thread.sleep(2000);
+                    viaje.iniciarViaje(chofer);
+                    gestionViajes.notificarCambios(viaje);
+                    System.out.println("Chofer asignado con éxito");
+                    Thread.sleep(2000);
+                    System.out.println("Viaje iniciado: " + viaje);
                 }
-
-                if (this.viaje != null) {
-                    synchronized (this.viaje) {
-                        this.viaje.setStatus("Iniciado");
-                        empresa.agregarInformacionAccionarHilos("El chofer " + this.chofer.getNombre() + " tomó un viaje.");
-                        while (!this.viaje.getStatus().equals("Pagado")) {
-                            this.viaje.wait();
-                        }
-                        this.chofer.finalizarViaje(this.viaje);
-                        empresa.agregarInformacionAccionarHilos("El chofer " + this.chofer.getNombre() + " finalizó su viaje.");
-                    }
-                    if (empresa.getViajesChofer(this.chofer).size() == empresa.getCantidadMaximaSolicitudesPorChofer()) {
-                        empresa.agregarInformacionAccionarHilos("El chofer " + this.chofer.getNombre() + " alcanzó el máximo de viajes.");
-                        empresa.quitarChofer(this.chofer);
-                        ejecutar = false;
-                    } else
-                        empresa.agregarInformacionAccionarHilos("El chofer " + this.chofer.getNombre() + " se encuentra libre nuevamente para atender pedidos.");
-                }
+                realizarViaje(viaje);
+                chofer.setEstado("Libre");
             }
-        } catch (MaximoChoferesTipoException e) {
-            System.out.println(e.getMessage());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            e.printStackTrace();
+            System.out.println("ChoferThread interrumpido");
         }
     }
 
+    private void realizarViaje(IViaje viaje) {
+        synchronized (viaje) {
+            System.out.println("Entró a realizar Viaje");
+            try {
+                while (!viaje.getStatus().equals("Pagado")) {
+                    viaje.wait();
+                }
+                System.out.println("El chofer " + viaje.getChofer().getNombre() + " se despertó ya que se pagó el viaje");
+                Thread.sleep(2000);
+                viaje.finalizarViaje();
+                System.out.println("Viaje finalizado: " + viaje);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.out.println("Error en realizarViaje: " + e.getMessage());
+            }
+            gestionViajes.finalizarViaje(viaje);
+        }
+        chofer.setCantidadDeViajes(chofer.getCantidadDeViajes() + 1);
+        chofer.agregaKm(viaje.getDistanciaReal());
+        //TODO: ACÁ VER SI SE DELEGA A LA CLASE VIAJE Y QUE HAGA TODO AHÍ O LO HACE CHOFER DESDE ESTE LADO.
+    }
+
+    public Chofer getChofer() {
+        return chofer;
+    }
+
+    public void setChofer(Chofer chofer) {
+        this.chofer = chofer;
+    }
 }

@@ -1,12 +1,12 @@
-package org.Hilos;
+package org.hilos;
 
 import org.excepciones.NoChoferException;
 import org.excepciones.NoVehiculoException;
 import org.excepciones.ViajeNoEncontradoException;
-import org.pedido.GestionViajes;
 import org.pedido.Pedido;
 import org.sistema.Empresa;
 import org.usuario.Cliente;
+import org.viaje.GestionViajes;
 import org.viaje.IViaje;
 
 

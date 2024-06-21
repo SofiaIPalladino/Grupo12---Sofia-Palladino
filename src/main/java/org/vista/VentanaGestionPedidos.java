@@ -1,32 +1,22 @@
 package org.vista;
 
 import org.controladores.ControladorGestionPedidos;
-import org.sistema.Empresa;
 import org.viaje.IViaje;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
-public class VentanaGestionPedidos extends JFrame implements Observer {
+public class VentanaGestionPedidos extends JFrame{
     private ControladorGestionPedidos controlador;
     private JPanel panelViajesActivos;
     private JPanel panelViajesFinalizados;
-    private JPanel panelHilosActivos;
     private JButton botonCerrar;
 
-    public VentanaGestionPedidos() {
-        this.controlador = new ControladorGestionPedidos();
-        Empresa.getInstance().addObserver(this);
-        initializeUI();
-    }
-
-    private void initializeUI() {
+    public VentanaGestionPedidos(ControladorGestionPedidos controlador) {
+        this.controlador = controlador;
         setTitle("Gestión de Pedidos");
-        setSize(800, 700);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -34,10 +24,12 @@ public class VentanaGestionPedidos extends JFrame implements Observer {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(null);
 
+        // Título
         JLabel titleLabel = new JLabel("GESTIÓN DE PEDIDOS", SwingConstants.CENTER);
         titleLabel.setBounds(250, 20, 300, 30);
         mainPanel.add(titleLabel);
 
+        // Panel de Viajes Activos
         JLabel activosLabel = new JLabel("ACTIVOS");
         activosLabel.setBounds(50, 60, 100, 30);
         mainPanel.add(activosLabel);
@@ -45,33 +37,23 @@ public class VentanaGestionPedidos extends JFrame implements Observer {
         panelViajesActivos = new JPanel();
         panelViajesActivos.setLayout(new BoxLayout(panelViajesActivos, BoxLayout.Y_AXIS));
         JScrollPane scrollPaneActivos = new JScrollPane(panelViajesActivos);
-        scrollPaneActivos.setBounds(50, 100, 700, 100);
+        scrollPaneActivos.setBounds(50, 100, 700, 150);
         mainPanel.add(scrollPaneActivos);
 
+        // Panel de Viajes Finalizados
         JLabel finalizadosLabel = new JLabel("FINALIZADOS");
-        finalizadosLabel.setBounds(50, 210, 100, 30);
+        finalizadosLabel.setBounds(50, 260, 100, 30);
         mainPanel.add(finalizadosLabel);
 
         panelViajesFinalizados = new JPanel();
         panelViajesFinalizados.setLayout(new BoxLayout(panelViajesFinalizados, BoxLayout.Y_AXIS));
         JScrollPane scrollPaneFinalizados = new JScrollPane(panelViajesFinalizados);
-        scrollPaneFinalizados.setBounds(50, 250, 700, 100);
+        scrollPaneFinalizados.setBounds(50, 300, 700, 150);
         mainPanel.add(scrollPaneFinalizados);
-
-        // Panel de Hilos Activos
-        JLabel hilosActivosLabel = new JLabel("HILOS ACTIVOS");
-        hilosActivosLabel.setBounds(50, 360, 150, 30);
-        mainPanel.add(hilosActivosLabel);
-
-        panelHilosActivos = new JPanel();
-        panelHilosActivos.setLayout(new BoxLayout(panelHilosActivos, BoxLayout.Y_AXIS));
-        JScrollPane scrollPaneHilosActivos = new JScrollPane(panelHilosActivos);
-        scrollPaneHilosActivos.setBounds(50, 400, 700, 100);
-        mainPanel.add(scrollPaneHilosActivos);
 
         // Botón Cerrar
         botonCerrar = new JButton("CERRAR");
-        botonCerrar.setBounds(350, 550, 100, 30);
+        botonCerrar.setBounds(350, 500, 100, 30);
         botonCerrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,39 +65,25 @@ public class VentanaGestionPedidos extends JFrame implements Observer {
         add(mainPanel);
         setVisible(true);
 
-        muestraViajes();
-        muestraViajesFinalizados();
-        muestraHilosActivos();
+        //muestraViajes();
+        //muestraViajesFinalizados();
     }
 
-    private void muestraViajes() {
-        List<IViaje> todosViajes = controlador.getViajes();
+    public void actualizarEstado(IViaje viaje) {
+        if (viaje.getStatus().equals("Finalizado")){
+            agregarViajeFinalizado(viaje);
+            controlador.quitarViajeActivo(viaje);
+        }
         panelViajesActivos.removeAll();
-        if (todosViajes.isEmpty()) {
-            panelViajesActivos.add(new JLabel("No hay viajes disponibles"));
-        } else {
-            for (IViaje viaje : todosViajes) {
-                if (!viaje.getStatus().equals("Finalizado")) {
-                    panelViajesActivos.add(new JLabel(informacionViaje(viaje)));
-                }
-            }
+        for (IViaje viajeActivo : controlador.getViajesActivos()) {
+            panelViajesActivos.add(new JLabel(informacionViaje(viajeActivo)));
         }
         panelViajesActivos.revalidate();
         panelViajesActivos.repaint();
     }
 
-    private void muestraViajesFinalizados() {
-        List<IViaje> todosViajes = controlador.getViajes();
-        panelViajesFinalizados.removeAll();
-        if (todosViajes.isEmpty()) {
-            panelViajesFinalizados.add(new JLabel("No hay viajes disponibles"));
-        } else {
-            for (IViaje viaje : todosViajes) {
-                if (viaje.getStatus().equals("Finalizado")) {
-                    panelViajesFinalizados.add(new JLabel(informacionViaje(viaje)));
-                }
-            }
-        }
+    private void agregarViajeFinalizado(IViaje viaje){
+        panelViajesFinalizados.add(new JLabel(informacionViaje(viaje)));
         panelViajesFinalizados.revalidate();
         panelViajesFinalizados.repaint();
     }
@@ -142,23 +110,5 @@ public class VentanaGestionPedidos extends JFrame implements Observer {
                 .append("Distancia: ").append(viaje.getDistanciaReal()).append(" km | ")
                 .append("Costo: ").append(viaje.getCosto());
         return sb.toString();
-    }
-
-    private void muestraHilosActivos() {
-        StringBuilder informacionHilos = Empresa.getInstance().getInformacionAccionarHilos();
-        if (panelHilosActivos !=null) {
-            panelHilosActivos.removeAll();
-            String logTexto = "<html>" + informacionHilos.toString().replace("\n", "<br>") + "</html>";
-            panelHilosActivos.add(new JLabel(logTexto));
-            panelHilosActivos.revalidate();
-            panelHilosActivos.repaint();
-        }
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        muestraViajes();
-        muestraViajesFinalizados();
-        muestraHilosActivos();
     }
 }

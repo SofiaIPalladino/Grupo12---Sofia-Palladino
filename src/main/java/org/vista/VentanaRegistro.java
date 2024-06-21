@@ -20,15 +20,19 @@ public class VentanaRegistro extends JFrame {
     private ControladorVentanaRegistro controlador;
 
     public VentanaRegistro() {
+        // Configuración de la ventana
         setTitle("Ventana de Registro");
         setSize(300, 200);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Inicializar el controlador
         controlador = new ControladorVentanaRegistro();
 
+        // Configuración del layout
         setLayout(new FlowLayout());
 
+        // Agregar campos de ejemplo
         add(new JLabel("Nombre:"));
         nombreField = new JTextField(20);
         add(nombreField);
@@ -46,11 +50,11 @@ public class VentanaRegistro extends JFrame {
         add(contraseniaField);
 
         btnRegistrar = new JButton("Registrar");
-        btnRegistrar.setEnabled(false);
+        btnRegistrar.setEnabled(false); // Deshabilitar el botón de registrar inicialmente
         add(btnRegistrar);
 
         btnSiguiente = new JButton("Siguiente");
-        btnSiguiente.setEnabled(false);
+        btnSiguiente.setEnabled(false); // Deshabilitar el botón de siguiente hasta que el registro sea exitoso
         add(btnSiguiente);
 
         // Agregar DocumentListener a los campos de texto
@@ -79,6 +83,7 @@ public class VentanaRegistro extends JFrame {
         apellidoField.getDocument().addDocumentListener(documentListener);
         contraseniaField.getDocument().addDocumentListener(documentListener);
 
+        // Agregar ActionListener para el botón de registrar
         btnRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -90,6 +95,7 @@ public class VentanaRegistro extends JFrame {
                 try{
                     controlador.registrarUsuario(usuario, nombre, apellido, contrasenia);
                     JOptionPane.showMessageDialog(null, "Registro exitoso!");
+                    // Abrir la ventana de inicio y cerrar la actual
                     VentanaInicio ventanaInicio = new VentanaInicio();
                     ventanaInicio.setVisible(true);
                     dispose();
@@ -99,9 +105,11 @@ public class VentanaRegistro extends JFrame {
             }
         });
 
+        // Agregar ActionListener para el botón de siguiente
         btnSiguiente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Abrir la ventana de inicio y cerrar la actual
                 VentanaInicio ventanaInicio = new VentanaInicio();
                 ventanaInicio.setVisible(true);
                 dispose();
