@@ -15,11 +15,11 @@ public class GestionViajes extends Observable {
     private final List<IViaje> viajes;
     private final Empresa empresa;
 
-    public GestionViajes(Empresa empresa) {
+    public GestionViajes() {
         this.viajesPendientes = new ArrayList<>();
         this.viajesConVehiculo = new ArrayList<>();
         this.viajes = new ArrayList<>();
-        this.empresa = empresa;
+        this.empresa = Empresa.getInstance();
         new GestionVehiculo(this).start();
     }
 

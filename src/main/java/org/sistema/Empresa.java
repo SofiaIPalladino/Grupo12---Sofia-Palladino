@@ -3,7 +3,7 @@ package org.sistema;
 
 import org.chofer.Chofer;
 import org.controladores.ControladorGestionPedidos;
-import org.controladores.ControladorVentanaChofer;
+import org.controladores.ControladorChofer;
 import org.controladores.ControladorViajeActual;
 import org.excepciones.NoChoferException;
 import org.excepciones.NoVehiculoException;
@@ -60,7 +60,7 @@ public class Empresa extends Observable {
         usuarios = new ArrayList<Usuario>();
         //pedidos = new ArrayList<Pedido>();
         viajesSinChoferes = new ArrayList<IViaje>();
-        gestionViajes = new GestionViajes(this);
+        gestionViajes = new GestionViajes();
         gestionPedidos = new GestionPedidos(this);
         new ControladorGestionPedidos(this);
     }
@@ -194,7 +194,7 @@ public class Empresa extends Observable {
 
     public synchronized void agregaChofer(Chofer c) {
         this.choferes.add(c);
-        new ControladorVentanaChofer(this,c);
+        new ControladorChofer(this,c);
     }
 
     public synchronized void agregaVehiculo(Vehiculo v) {

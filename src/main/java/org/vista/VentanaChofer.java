@@ -1,6 +1,6 @@
 package org.vista;
 
-import org.controladores.ControladorVentanaChofer;
+import org.controladores.ControladorChofer;
 import org.usuario.Cliente;
 import org.viaje.IViaje;
 
@@ -12,9 +12,9 @@ public class VentanaChofer extends JFrame {
     private JPanel panelClientes;
     private JPanel panelViajesFinalizados;
     private JButton botonCerrar;
-    private ControladorVentanaChofer controlador;
+    private ControladorChofer controlador;
 
-    public VentanaChofer(ControladorVentanaChofer controlador) {
+    public VentanaChofer(ControladorChofer controlador) {
         this.controlador = controlador;
         setTitle("Chofer: " + controlador.getChofer().getNombre());
         setSize(1024, 768);

@@ -8,14 +8,14 @@ import org.viaje.IViaje;
 import org.vista.VentanaChofer;
 import java.util.*;
 
-public class ControladorVentanaChofer implements Observer {
+public class ControladorChofer implements Observer {
 
     private Empresa empresa;
     private Chofer chofer;
     private VentanaChofer ventana;
     private Map<Cliente, Integer> clientesChofer;
 
-    public ControladorVentanaChofer(Empresa empresa, Chofer chofer) {
+    public ControladorChofer(Empresa empresa, Chofer chofer) {
         this.empresa = empresa;
         this.chofer = chofer;
         this.clientesChofer = new HashMap<>();

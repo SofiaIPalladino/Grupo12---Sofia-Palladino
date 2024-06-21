@@ -1,15 +1,15 @@
 package org.vehiculo;
 
-import org.controladores.ControladorGestionPedidos;
+import org.controladores.ControladorPedido;
 import org.excepciones.NoVehiculoException;
 import org.viaje.IViaje;
 
 public class CrearVehiculoHilo implements Runnable {
-    private ControladorGestionPedidos controlador;
+    private ControladorPedido controlador;
     private IViaje viaje;
 
-    public CrearVehiculoHilo(ControladorGestionPedidos controladorGestionPedidos,IViaje viaje) {
-        this.controlador=controladorGestionPedidos;
+    public CrearVehiculoHilo(ControladorPedido controlador,IViaje viaje) {
+        this.controlador=controlador;
         this.viaje=viaje;
     }
 

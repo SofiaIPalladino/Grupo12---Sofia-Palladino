@@ -32,7 +32,7 @@ public class GestionUsuario{
     public void agregaUsuario(String usuario, String contrasenia, String nombre, String apellido) {
         UsuarioFactory factoryUsuario = new UsuarioFactory();
     //    Usuario nuevoUsuario = new Usuario(usuario, contrasenia, nombre, apellido);
-        Usuario usuarioFactory = factoryUsuario.crea(usuario, contrasenia, nombre, apellido,false);
+        Usuario usuarioFactory = UsuarioFactory.crea(usuario, contrasenia, nombre, apellido,false);
         this.usuarios.add(usuarioFactory);
         if (!usuarioFactory.getClass().equals(Administrador.class))
             this.clientes.add((Cliente) usuarioFactory);

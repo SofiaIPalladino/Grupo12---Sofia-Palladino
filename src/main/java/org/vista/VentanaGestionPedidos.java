@@ -1,6 +1,6 @@
 package org.vista;
 
-import org.controladores.ControladorGestionPedidos;
+import org.controladores.ControladorPedido;
 import org.viaje.IViaje;
 
 import javax.swing.*;
@@ -8,12 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class VentanaGestionPedidos extends JFrame{
-    private ControladorGestionPedidos controlador;
+    private ControladorPedido controlador;
     private JPanel panelViajesActivos;
     private JPanel panelViajesFinalizados;
     private JButton botonCerrar;
 
-    public VentanaGestionPedidos(ControladorGestionPedidos controlador) {
+    public VentanaGestionPedidos(ControladorPedido controlador) {
         this.controlador = controlador;
         setTitle("Gestión de Pedidos");
         setSize(800, 600);

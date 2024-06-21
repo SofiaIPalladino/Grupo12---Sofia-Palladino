@@ -13,9 +13,9 @@ public class GestionPedidos {
 	private Empresa empresa;
 	private List<Pedido> pedidos;
 
-	public GestionPedidos(Empresa empresa) {
+	public GestionPedidos() {
 		this.pedidos = new ArrayList<>();
-		this.empresa = empresa;
+		this.empresa = Empresa.getInstance();
 	}
 
 	public void agregarPedido(Pedido pedido) {

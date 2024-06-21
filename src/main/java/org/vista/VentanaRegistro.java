@@ -1,6 +1,6 @@
 package org.vista;
 
-import org.controladores.ControladorVentanaRegistro;
+import org.controladores.ControladorUsuario;
 import org.excepciones.UsuarioExistenteException;
 
 import javax.swing.*;
@@ -17,7 +17,7 @@ public class VentanaRegistro extends JFrame {
     private JPasswordField contraseniaField;
     private JButton btnRegistrar;
     private JButton btnSiguiente;
-    private ControladorVentanaRegistro controlador;
+    private ControladorUsuario controlador;
 
     public VentanaRegistro() {
         // Configuración de la ventana
@@ -27,7 +27,7 @@ public class VentanaRegistro extends JFrame {
         setLocationRelativeTo(null);
 
         // Inicializar el controlador
-        controlador = new ControladorVentanaRegistro();
+        controlador = new ControladorUsuario();
 
         // Configuración del layout
         setLayout(new FlowLayout());

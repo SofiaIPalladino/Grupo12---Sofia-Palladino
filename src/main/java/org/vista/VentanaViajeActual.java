@@ -1,6 +1,6 @@
 package org.vista;
 
-import org.controladores.ControladorViajeActual;
+import org.controladores.ControladorUsuario;
 import org.excepciones.ViajeNoEncontradoException;
 
 import org.viaje.IViaje;
@@ -13,9 +13,9 @@ import java.util.Date;
 public class VentanaViajeActual extends JFrame{
     private JTextField[] textFields;
     private JButton botonPaga;
-    private ControladorViajeActual controlador;
+    private ControladorUsuario controlador;
 
-    public VentanaViajeActual(IViaje viaje,ControladorViajeActual controlador) {
+    public VentanaViajeActual(IViaje viaje,ControladorUsuario controlador) {
         setTitle("Información Viaje Actual");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

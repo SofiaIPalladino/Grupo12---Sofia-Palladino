@@ -45,7 +45,7 @@ public class HiloCliente implements Runnable {
                         empresa.agregarInformacionAccionarHilos("El viaje del cliente " + this.cliente.getUsuario() + " ha iniciado");
                     }
                     synchronized (empresa.getViajes()) {
-                        gestionViajes.pagoViaje(viaje);
+                        gestionViajes.pagarViaje(viaje);
                         empresa.agregarInformacionAccionarHilos("El cliente " + this.cliente.getUsuario() + " pagó el viaje");
                         viaje.notifyAll();
                     }

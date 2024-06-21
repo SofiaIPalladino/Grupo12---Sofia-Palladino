@@ -1,5 +1,5 @@
 package org.vista;
-import org.controladores.ControladorVentanaLogin;
+import org.controladores.ControladorUsuario;
 import org.usuario.Cliente;
 import org.usuario.Usuario;
 
@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 public class VentanaLogin extends JFrame {
     private JTextField usuarioFieldText;
     private JPasswordField campoContrasenia;
-    private ControladorVentanaLogin controlador;
+    private ControladorUsuario controlador;
 
     public VentanaLogin() {
         // Configuración de la ventana
@@ -24,7 +24,7 @@ public class VentanaLogin extends JFrame {
 
 
         // Inicializar el controlador
-        controlador = new ControladorVentanaLogin();
+        controlador = new ControladorUsuario();
 
         // Creación del panel principal
         JPanel mainPanel = new JPanel();
