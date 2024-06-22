@@ -3,6 +3,7 @@ package org.hilos;
 import org.excepciones.NoChoferException;
 import org.excepciones.NoVehiculoException;
 import org.excepciones.ViajeNoEncontradoException;
+import org.pedido.GestionPedidos;
 import org.pedido.Pedido;
 import org.sistema.Empresa;
 import org.usuario.Cliente;
@@ -14,6 +15,7 @@ public class HiloCliente implements Runnable {
     private final int cantViajes;
     private Cliente cliente;
     private GestionViajes gestionViajes = new GestionViajes();
+    private GestionPedidos gestionPedido= new GestionPedidos();
 
     public HiloCliente(Cliente cliente, int cantViajes) {
         this.cliente = cliente;
@@ -33,7 +35,7 @@ public class HiloCliente implements Runnable {
                 pedido = new Pedido("Zona Peligrosa", true, "usoBaul", 3, this.cliente, 20);
                 contador++;
                 try {
-                    gestionViajes.evaluaPedido(pedido);
+                    gestionPedido.evaluarPedido(pedido);
                     synchronized (empresa.getViajes()) {
                         viaje = gestionViajes.convertirPedidoEnViaje(pedido);
 

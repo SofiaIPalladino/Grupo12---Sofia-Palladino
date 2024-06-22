@@ -2,9 +2,8 @@ package org.sistema;
 
 
 import org.chofer.Chofer;
-import org.controladores.ControladorGestionPedidos;
+import org.controladores.ControladorPedido;
 import org.controladores.ControladorChofer;
-import org.controladores.ControladorViajeActual;
 import org.excepciones.NoChoferException;
 import org.excepciones.NoVehiculoException;
 import org.excepciones.UsuarioExistenteException;
@@ -13,6 +12,7 @@ import org.pedido.GestionPedidos;
 import org.pedido.Pedido;
 import org.usuario.Administrador;
 import org.usuario.Cliente;
+import org.usuario.GestionUsuario;
 import org.usuario.Usuario;
 import org.usuario.UsuarioFactory;
 import org.vehiculo.Vehiculo;
@@ -42,6 +42,7 @@ public class Empresa extends Observable {
     private List<IViaje> viajesSinChoferes;
     private GestionViajes gestionViajes;
     private GestionPedidos gestionPedidos;
+    private GestionUsuario gestionUsuario;
 
     private double recaudado = 0;
 
@@ -61,8 +62,8 @@ public class Empresa extends Observable {
         //pedidos = new ArrayList<Pedido>();
         viajesSinChoferes = new ArrayList<IViaje>();
         gestionViajes = new GestionViajes();
-        gestionPedidos = new GestionPedidos(this);
-        new ControladorGestionPedidos(this);
+        gestionPedidos = new GestionPedidos();
+        new ControladorPedido();
     }
 
     public static synchronized Empresa getInstance() {
