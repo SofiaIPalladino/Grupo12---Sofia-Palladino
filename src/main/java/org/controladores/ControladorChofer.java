@@ -30,7 +30,7 @@ public class ControladorChofer implements Observer {
     }
 
     private void iniciarHiloChofer(Chofer chofer) {
-        HiloChofer choferHilo = new HiloChofer(chofer, empresa.getGestionViajes());
+        HiloChofer choferHilo = new HiloChofer(chofer);
         choferHilo.start();
     }
 

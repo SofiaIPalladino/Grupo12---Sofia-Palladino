@@ -55,7 +55,10 @@ public class HiloCliente implements Runnable {
                     empresa.agregarInformacionAccionarHilos("No hay vehiculo disponible para el pedido del cliente " + this.cliente.getUsuario());
                 } catch (NoChoferException e) {
                     empresa.agregarInformacionAccionarHilos("No hay ningun chofer en la empresa");
-                }
+                } catch (ViajeNoEncontradoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
 
         } catch (RuntimeException | InterruptedException e) {

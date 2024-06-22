@@ -44,7 +44,7 @@ public class Simulacion {
         Chofer choferP1 = new ChoferPermanente("1357", "Chofer Permantente1", 4, Fecha.setFecha(10, 4, 2020));
         Chofer choferP2 = new ChoferPermanente("2468", "Chofer Permanente1", 0, Fecha.setFecha(28, 2, 2021));
 
-        Cliente cliente1= new Cliente(new Usuario("sofi","dijweofj","wdqwd","swqdqw"));
+        Cliente cliente1= new Cliente("sofi","dijweofj","wdqwd","swqdqw");
         //Thread hiloChofer1 = new Thread(choferT1);
         //Thread hiloChofer2 = new Thread(choferC1);
         //Thread hiloChofer3 = new Thread(choferP1);

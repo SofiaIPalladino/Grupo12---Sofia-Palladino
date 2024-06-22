@@ -65,7 +65,7 @@ public class mainTesting {
         empresa.agregaVehiculo(combi2);
 
         // Usuarios
-        empresa.agregaCliente("sofi1", "1234", "Sofia1", "Palladino",);
+        empresa.agregaCliente("sofi1", "1234", "Sofia1", "Palladino");
         empresa.agregaCliente("sofi2", "1234", "Sofia2", "Palladino");
 
         // Inicio de hilos

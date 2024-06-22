@@ -111,7 +111,11 @@ public class Empresa extends Observable {
         this.cantidadMaximaChoferesTipo = cantidadMaximaChoferesTipo;
     }
     
-    
+    //para testear
+    public void agregaCliente(String usuario, String contrasenia, String nombre, String apellido) {
+        Cliente cliente= new Cliente(usuario,contrasenia,nombre,apellido);
+        this.clientes.add(cliente);
+    }
     
     public synchronized List<IViaje> getViajesSinChoferes() {
         return viajesSinChoferes;

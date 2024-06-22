@@ -9,9 +9,8 @@ public class HiloChofer extends Thread {
     private Chofer chofer;
     private GestionViajes gestionViajes;
 
-    public HiloChofer(Chofer chofer, GestionViajes gestorViajes) {
+    public HiloChofer(Chofer chofer) {
         this.chofer = chofer;
-        this.gestionViajes = gestorViajes;
     }
 
     @Override
