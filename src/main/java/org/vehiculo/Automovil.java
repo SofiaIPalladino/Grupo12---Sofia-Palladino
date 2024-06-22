@@ -2,8 +2,6 @@ package org.vehiculo;
 
 public class Automovil extends Vehiculo {
 
-	private static final String tipo="Automovil";
-
 	public Automovil(String numpatente) {
 		super(numpatente, 4, true, true);
 	}

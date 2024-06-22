@@ -8,7 +8,7 @@ import org.viaje.IViaje;
 import org.vista.VentanaChofer;
 import java.util.*;
 
-public class ControladorChofer implements Observer {
+public class ControladorChofer extends Thread implements Observer {
 
     private Empresa empresa;
     private Chofer chofer;
@@ -22,16 +22,10 @@ public class ControladorChofer implements Observer {
         ventana = new VentanaChofer(this);
         ventana.setVisible(true);
         empresa.addObserver(this);
-        iniciarHiloChofer(chofer);
     }
 
     public Chofer getChofer() {
         return chofer;
-    }
-
-    private void iniciarHiloChofer(Chofer chofer) {
-        HiloChofer choferHilo = new HiloChofer(chofer);
-        choferHilo.start();
     }
 
     public Map<Cliente, Integer> getClientesChofer(){

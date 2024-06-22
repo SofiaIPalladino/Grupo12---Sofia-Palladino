@@ -49,7 +49,7 @@ public class Empresa extends Observable {
     private int cantidadMaximaSolicitudesPorChofer;
 
     private String usuariolog;
-    private StringBuilder informacionAccionarHilos = new StringBuilder("");
+    private final StringBuilder informacionAccionarHilos = new StringBuilder("");
 
 
     private Empresa() {
@@ -62,9 +62,6 @@ public class Empresa extends Observable {
         usuarios = new ArrayList<Usuario>();
         //pedidos = new ArrayList<Pedido>();
         viajesSinChoferes = new ArrayList<IViaje>();
-        gestionViajes = new GestionViajes();
-        gestionPedidos = new GestionPedidos();
-        new ControladorPedido();
     }
 
     public static synchronized Empresa getInstance() {

@@ -11,15 +11,17 @@ import org.viaje.GestionViajes;
 import org.viaje.IViaje;
 
 
-public class HiloCliente implements Runnable {
+public class HiloCliente extends Thread {
     private final int cantViajes;
     private Cliente cliente;
-    private GestionViajes gestionViajes = new GestionViajes();
-    private GestionPedidos gestionPedido= new GestionPedidos();
+    private GestionViajes gestionViajes;
+    private GestionPedidos gestionPedidos;
 
-    public HiloCliente(Cliente cliente, int cantViajes) {
+    public HiloCliente(Cliente cliente, int cantViajes, GestionViajes gestionViajes, GestionPedidos gestionPedidos) {
         this.cliente = cliente;
         this.cantViajes = cantViajes;
+        this.gestionViajes = gestionViajes;
+        this.gestionPedidos = gestionPedidos;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class HiloCliente implements Runnable {
                 pedido = new Pedido("Zona Peligrosa", true, "usoBaul", 3, this.cliente, 20);
                 contador++;
                 try {
-                    gestionPedido.evaluarPedido(pedido);
+                    gestionPedidos.evaluarPedido(pedido);
                     synchronized (empresa.getViajes()) {
                         viaje = gestionViajes.convertirPedidoEnViaje(pedido);
 

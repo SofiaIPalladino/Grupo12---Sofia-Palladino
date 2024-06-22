@@ -5,12 +5,16 @@ import org.viaje.GestionViajes;
 import org.viaje.GestionViajes;
 import org.viaje.IViaje;
 
+import java.util.Observable;
+import java.util.Observer;
+
 public class HiloChofer extends Thread {
     private Chofer chofer;
     private GestionViajes gestionViajes;
 
-    public HiloChofer(Chofer chofer) {
+    public HiloChofer(Chofer chofer, GestionViajes gestionViajes) {
         this.chofer = chofer;
+        this.gestionViajes = gestionViajes;
     }
 
     @Override
@@ -18,17 +22,19 @@ public class HiloChofer extends Thread {
         try {
             while (true) {
                 IViaje viaje = gestionViajes.obtenerViajeConVehiculo(chofer);
-                synchronized (viaje) {
-                    chofer.setEstado("Ocupado");
-                    Thread.sleep(2000);
-                    viaje.iniciarViaje(chofer);
-                    gestionViajes.notificarCambios(viaje);
-                    System.out.println("Chofer asignado con éxito");
-                    Thread.sleep(2000);
-                    System.out.println("Viaje iniciado: " + viaje);
+                if (viaje != null) {
+                    synchronized (viaje) {
+                        chofer.setEstado("Ocupado");
+                        Thread.sleep(2000);
+                        viaje.iniciarViaje(chofer);
+                        gestionViajes.notificarCambios(viaje);
+                        System.out.println("Chofer asignado con éxito");
+                        Thread.sleep(2000);
+                        System.out.println("Viaje iniciado: " + viaje);
+                    }
+                    realizarViaje(viaje);
+                    chofer.setEstado("Libre");
                 }
-                realizarViaje(viaje);
-                chofer.setEstado("Libre");
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

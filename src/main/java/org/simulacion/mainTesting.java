@@ -7,17 +7,23 @@ import org.chofer.ChoferContratado;
 import org.chofer.ChoferPermanente;
 import org.chofer.ChoferTemporario;
 import org.excepciones.MaximoChoferesTipoException;
+import org.pedido.GestionPedidos;
 import org.sistema.Empresa;
 import org.sistema.Fecha;
 import org.usuario.Cliente;
+import org.usuario.GestionUsuario;
 import org.usuario.Usuario;
 import org.vehiculo.Automovil;
 import org.vehiculo.Combi;
 import org.vehiculo.Moto;
+import org.viaje.GestionViajes;
 
 public class mainTesting {
     public static void main(String[] args) throws MaximoChoferesTipoException {
         Empresa empresa = Empresa.getInstance();
+        GestionUsuario gestionUsuario=new GestionUsuario();
+        GestionViajes gestionViajes=new GestionViajes();
+        GestionPedidos gestionPedidos=new GestionPedidos();
 
         int cantClientes = 2;
         int cantidadUnidadesCadaTipo = 2;
@@ -41,13 +47,13 @@ public class mainTesting {
         Cliente cliente2 = new Cliente("maria", "abc123", "maria", "qwerty"); // Cliente adicional para pruebas
 
         // Hilos de Choferes
-        Thread hiloChofer1 = new Thread(new HiloChofer(choferT1));
-        Thread hiloChofer2 = new Thread(new HiloChofer(choferC1));
-        Thread hiloChofer3 = new Thread(new HiloChofer(choferP1));
+        Thread hiloChofer1 = new Thread(new HiloChofer(choferT1,gestionViajes));
+        Thread hiloChofer2 = new Thread(new HiloChofer(choferC1,gestionViajes));
+        Thread hiloChofer3 = new Thread(new HiloChofer(choferP1,gestionViajes));
 
         // Hilos de Clientes
-        Thread hiloCliente1 = new Thread(new HiloCliente(cliente1, 3));
-        Thread hiloCliente2 = new Thread(new HiloCliente(cliente2, 2)); // Cliente adicional para pruebas
+        Thread hiloCliente1 = new Thread(new HiloCliente(cliente1, 3,gestionViajes,gestionPedidos));
+        Thread hiloCliente2 = new Thread(new HiloCliente(cliente2, 2,gestionViajes,gestionPedidos)); // Cliente adicional para pruebas
 
         // Vehículos
         Moto moto1 = new Moto("111111");
@@ -65,8 +71,8 @@ public class mainTesting {
         empresa.agregaVehiculo(combi2);
 
         // Usuarios
-        empresa.agregaCliente("sofi1", "1234", "Sofia1", "Palladino");
-        empresa.agregaCliente("sofi2", "1234", "Sofia2", "Palladino");
+        gestionUsuario.agregaUsuario("sofi1", "1234", "Sofia1", "Palladino");
+        gestionUsuario.agregaUsuario("sofi2", "1234", "Sofia2", "Palladino");
 
         // Inicio de hilos
         hiloCliente1.start();

@@ -13,7 +13,7 @@ public class GestionViajes extends Observable {
     private final List<IViaje> viajesPendientes;
     private final List<IViaje> viajesConVehiculo;
     private final List<IViaje> viajes;
-    private final Empresa empresa;
+    private Empresa empresa;
 
     public GestionViajes() {
         this.viajesPendientes = new ArrayList<>();

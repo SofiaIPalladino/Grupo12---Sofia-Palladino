@@ -2,8 +2,6 @@ package org.vehiculo;
 
 public class Combi extends Vehiculo{
 
-	private static final String tipo="Combi";
-
 	public Combi(String numpatente) {
 		super(numpatente, 10, false, true);
 	}

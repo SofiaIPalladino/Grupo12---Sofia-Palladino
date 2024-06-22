@@ -16,8 +16,14 @@ import java.util.List;
  */
 
 public class GestionUsuario{
-	private Empresa empresa=Empresa.getInstance();
+	private Empresa empresa;
 	
+	
+	
+	public GestionUsuario() {
+		this.empresa = Empresa.getInstance();
+	}
+
 	public Usuario creaUsuario(Usuario usuario) throws UsuarioExistenteException {
 		  Iterator<Usuario> iterator =  Empresa.getInstance().getUsuarios().iterator();
 	        while (iterator.hasNext()) {
@@ -30,11 +36,9 @@ public class GestionUsuario{
 	}
 	
     public void agregaUsuario(String usuario, String contrasenia, String nombre, String apellido) {
-    //    Usuario nuevoUsuario = new Usuario(usuario, contrasenia, nombre, apellido);
+		//Usuario nuevoUsuario = new Usuario(usuario, contrasenia, nombre, apellido);
         Usuario usuarioFactory = UsuarioFactory.crea(usuario, contrasenia, nombre, apellido,false);
-        this.empresa.getUsuarios().add(usuarioFactory);
-        if (!usuarioFactory.getClass().equals(Administrador.class))
-            this.empresa.getClientes().add((Cliente) usuarioFactory);
+		this.empresa.getClientes().add((Cliente) usuarioFactory);
     }
 
     public boolean existeUsuario(String usuarioing, boolean registro) throws UsuarioExistenteException {
