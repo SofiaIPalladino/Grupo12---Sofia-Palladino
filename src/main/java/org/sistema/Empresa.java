@@ -12,7 +12,6 @@ import org.pedido.GestionPedidos;
 import org.pedido.Pedido;
 import org.usuario.Administrador;
 import org.usuario.Cliente;
-import org.usuario.GestionUsuario;
 import org.usuario.Usuario;
 import org.usuario.UsuarioFactory;
 import org.vehiculo.Vehiculo;
@@ -42,13 +41,15 @@ public class Empresa extends Observable {
     private List<IViaje> viajesSinChoferes;
     private GestionViajes gestionViajes;
     private GestionPedidos gestionPedidos;
-    private GestionUsuario gestionUsuario;
 
     private double recaudado = 0;
 
-
+    private int cantidadMaximaSolicitudesPorCliente;
+    private int cantidadMaximaChoferesTipo;
+    private int cantidadMaximaSolicitudesPorChofer;
 
     private String usuariolog;
+    private StringBuilder informacionAccionarHilos = new StringBuilder("");
 
 
     private Empresa() {
@@ -71,7 +72,47 @@ public class Empresa extends Observable {
             instance = new Empresa();
         return instance;
     }
+    
+    public StringBuilder getInformacionAccionarHilos() {
+        return informacionAccionarHilos;
+    }
+    
+    public void agregarInformacionAccionarHilos(String informacionAccionarHilos) {
+        this.informacionAccionarHilos.append(informacionAccionarHilos).append("\n");
+        this.notificarCambios();
+    }
+    
+    public void notificarCambios() {
+        setChanged();
+        notifyObservers();
+    }
+    
+    public int getCantidadMaximaSolicitudesPorCliente() {
+        return this.cantidadMaximaSolicitudesPorCliente;
+    }
+    
+    public void setCantidadMaximaSolicitudesPorCliente(int cantidadMaximaSolicitudesPorCliente) {
+        this.cantidadMaximaSolicitudesPorCliente = (int) (Math.random() * cantidadMaximaSolicitudesPorCliente) + 1;
+    }
+    
+    public int getCantidadMaximaSolicitudesPorChofer() {
+        return this.cantidadMaximaSolicitudesPorChofer;
+    }
+    
+    public void setCantidadMaximaSolicitudesPorChofer(int cantidadMaximaSolicitudesPorChofer) {
+        this.cantidadMaximaSolicitudesPorChofer = (int) ((Math.random() * cantidadMaximaSolicitudesPorChofer) + 1);
+    }
+    
+    public int getCantidadMaximaChoferesTipo() {
+        return cantidadMaximaChoferesTipo;
+    }
 
+    public void setCantidadMaximaChoferesTipo(int cantidadMaximaChoferesTipo) {
+        this.cantidadMaximaChoferesTipo = cantidadMaximaChoferesTipo;
+    }
+    
+    
+    
     public synchronized List<IViaje> getViajesSinChoferes() {
         return viajesSinChoferes;
     }

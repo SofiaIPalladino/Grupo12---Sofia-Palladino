@@ -31,6 +31,9 @@ public class ControladorUsuario implements ActionListener,Observer{
          empresa.addObserver(this);
         
     }
+    
+    public ControladorUsuario() {
+    }
 
 	
     public boolean validaUsuario(String usuario) {

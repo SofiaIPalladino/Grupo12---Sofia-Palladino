@@ -13,12 +13,15 @@ public class SistemaLogueo{
     }
 
     public boolean existeUsuario(String usuario) {
-        for (Usuario u : usuarios) {
-            if (u.getUsuario().equals(usuario)) {
-                return true;
+        boolean existe = false;
+        int i = 0;
+        while (i < usuarios.size() && !existe) {
+            if (usuarios.get(i).getUsuario().equals(usuario)) {
+               	existe = true;
             }
+            i++;
         }
-        return false;
+        return existe;
     }
 
     public void registrarUsuario(String usuario, String contrasenia, String nombre, String apellido) {
@@ -28,14 +31,16 @@ public class SistemaLogueo{
     }
 
     
-    //corregir con un while para no po
     public boolean login(String usuario, String contrasenia) {
-        for (Usuario u : usuarios) {
-            if (u.getUsuario().equals(usuario) && u.getContrasenia().equals(contrasenia)) {
-                return true; // usuario y contraseña correctos
+        boolean autenticado = false;
+        int i = 0;
+        while (i < usuarios.size() && !autenticado) {
+            if (usuarios.get(i).getUsuario().equals(usuario) && usuarios.get(i).getContrasenia().equals(contrasenia)) {
+                autenticado = true;
             }
+            i++;
         }
-        return false; // usuario o contraseña incorrectos
+        return autenticado; 
     }
 }
 

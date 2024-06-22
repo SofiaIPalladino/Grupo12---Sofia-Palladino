@@ -26,12 +26,10 @@ public class GestionUsuario{
 	            	throw new UsuarioExistenteException("Usuario ya existente: "+usuario.getUsuario());
 	            }
 	        }
-	       UsuarioFactory factoryUsuario = new UsuarioFactory();
-	       return factoryUsuario.crea(usuario.getUsuario(),usuario.getContrasenia(),usuario.getNombre(),usuario.getApellido(),false); //creacion de cliente
+	       return UsuarioFactory.crea(usuario.getUsuario(),usuario.getContrasenia(),usuario.getNombre(),usuario.getApellido(),false); //creacion de cliente
 	}
 	
     public void agregaUsuario(String usuario, String contrasenia, String nombre, String apellido) {
-         UsuarioFactory factoryUsuario = new UsuarioFactory();
     //    Usuario nuevoUsuario = new Usuario(usuario, contrasenia, nombre, apellido);
         Usuario usuarioFactory = UsuarioFactory.crea(usuario, contrasenia, nombre, apellido,false);
         this.empresa.getUsuarios().add(usuarioFactory);
