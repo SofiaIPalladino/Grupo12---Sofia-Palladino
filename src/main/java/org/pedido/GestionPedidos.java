@@ -10,12 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestionPedidos {
-	private Empresa empresa;
 	private List<Pedido> pedidos;
 
 	public GestionPedidos() {
 		this.pedidos = new ArrayList<>();
-		this.empresa = Empresa.getInstance();
 	}
 
 	public void agregarPedido(Pedido pedido) {
@@ -27,7 +25,7 @@ public class GestionPedidos {
 	}
 
 	private boolean buscarVehiculo(Pedido p) throws NoVehiculoException {
-		for (Vehiculo vehiculo : empresa.getVehiculos()) {
+		for (Vehiculo vehiculo : Empresa.getInstance().getVehiculos()) {
 			if (vehiculo.verificaPasajeros(p.getCantPersonas()) && vehiculo.verificaBaul(p.usoBaul()) && vehiculo.verificaMascota(p.getMascota())) {
 				return true;
 			}
@@ -36,7 +34,7 @@ public class GestionPedidos {
 	}
 
 	private boolean buscarChofer(){
-		if (!empresa.getChoferes().isEmpty())
+		if (!Empresa.getInstance().getChoferes().isEmpty())
 			return true;
 		else
 			return false;

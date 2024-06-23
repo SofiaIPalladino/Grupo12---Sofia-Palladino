@@ -6,6 +6,7 @@ import org.pedido.Pedido;
 import org.sistema.Empresa;
 import org.usuario.Cliente;
 import org.vehiculo.GestionVehiculo;
+import org.vehiculo.Vehiculo;
 
 import java.util.*;
 
@@ -13,19 +14,20 @@ public class GestionViajes extends Observable {
     private final List<IViaje> viajesPendientes;
     private final List<IViaje> viajesConVehiculo;
     private final List<IViaje> viajes;
-    private Empresa empresa;
+    private final List<Vehiculo> vehiculos;
+
 
     public GestionViajes() {
+        this.vehiculos = new ArrayList<>();
         this.viajesPendientes = new ArrayList<>();
         this.viajesConVehiculo = new ArrayList<>();
         this.viajes = new ArrayList<>();
-        this.empresa = Empresa.getInstance();
         new GestionVehiculo(this).start();
     }
 
     public IViaje convertirPedidoEnViaje(Pedido pedido) {
         ViajeFactory viajeFactory = new ViajeFactory();
-        return (Viaje) viajeFactory.getViaje(pedido);
+        return viajeFactory.getViaje(pedido);
     }
 
     public void agregarViaje(IViaje viaje) {
@@ -57,7 +59,9 @@ public class GestionViajes extends Observable {
     }
 
     public void pagarViaje(IViaje viaje) throws ViajeNoEncontradoException {
+        System.out.println("woiwehf");
         viaje.getCliente().pagoViaje(viaje);
+        System.out.println("salió de pagar viaje Viaje");
         notificarCambios(viaje);
         synchronized (viaje) {
             viaje.notify();
@@ -103,13 +107,21 @@ public class GestionViajes extends Observable {
         return viajesChofer;
     }
 
+    public synchronized List<Vehiculo> getVehiculos() {
+        return vehiculos;
+    }
+
+    public void agregarVehiculos(Vehiculo vehiculo) {
+        this.vehiculos.add(vehiculo);
+    }
+
     public List<IViaje> getViajesPendientes() {
         return viajesPendientes;
     }
 
-
     public void notificarCambios(IViaje viaje) {
-        empresa.notificarCambios(viaje);
+        Empresa.getInstance().notificarCambios(viaje);
     }
+
 }
 

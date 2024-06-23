@@ -52,8 +52,8 @@ public class mainTesting {
         Thread hiloChofer3 = new Thread(new HiloChofer(choferP1,gestionViajes));
 
         // Hilos de Clientes
-        Thread hiloCliente1 = new Thread(new HiloCliente(cliente1, 3,gestionViajes,gestionPedidos));
-        Thread hiloCliente2 = new Thread(new HiloCliente(cliente2, 2,gestionViajes,gestionPedidos)); // Cliente adicional para pruebas
+        Thread hiloCliente1 = new Thread(new HiloCliente(cliente1, 3));
+        Thread hiloCliente2 = new Thread(new HiloCliente(cliente2, 2)); // Cliente adicional para pruebas
 
         // Vehículos
         Moto moto1 = new Moto("111111");

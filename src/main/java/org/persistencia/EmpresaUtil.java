@@ -14,12 +14,7 @@ public class EmpresaUtil {
         EmpresaDTO edto= new EmpresaDTO(
                 empresa.getClientes(),
                 empresa.getUsuarios(),
-                empresa.getChoferes(),
-                empresa.getChoferesEnUso(),
-                empresa.getVehiculos(),
-                empresa.getVehiculosEnUso(),
                 empresa.getViajes(),
-                empresa.getPedidos(),
                 empresa.getRecaudado()
         );
         return edto;
@@ -33,10 +28,6 @@ public class EmpresaUtil {
         Empresa e = Empresa.getInstance();
         e.setClientes(dto.getClientes());
         e.setUsuarios(dto.getUsuarios());
-        e.setChoferes(dto.getChoferes());
-        e.setChoferesEnUso(dto.getChoferesEnUso());
-        e.setVehiculos(dto.getVehiculos());
-        e.setVehiculosEnUso(dto.getVehiculosEnUso());
         e.setRecaudado(dto.getRecaudado());
     }
 }

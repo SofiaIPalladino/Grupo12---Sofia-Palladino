@@ -63,7 +63,7 @@ public class ControladorUsuario implements ActionListener,Observer{
     }
     
     public void pagarViaje() throws ViajeNoEncontradoException {
-        this.cliente.pagoViaje(viaje);;
+        this.cliente.pagoViaje(viaje);
     }
     
     public void accionCerrar(){
@@ -79,6 +79,5 @@ public class ControladorUsuario implements ActionListener,Observer{
             }
         }
     }
-    
 
 }

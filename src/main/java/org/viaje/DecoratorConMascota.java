@@ -31,31 +31,25 @@ public class DecoratorConMascota extends DecoratorViajes {
 	}
 
 	@Override
-	public Pedido getPedido() {
-		return this.encapsulado.getPedido();
-	}
-
-	@Override
 	public void iniciarViaje(Chofer chofer) {
-		// TODO Auto-generated method stub
-		
+		this.encapsulado.iniciarViaje(chofer);
+
 	}
 
 	@Override
 	public void asignarVehiculo(Vehiculo vehiculo) {
-		// TODO Auto-generated method stub
-		
+		this.encapsulado.asignarVehiculo(vehiculo);
+
 	}
 
 	@Override
 	public void pagarViaje() {
-		// TODO Auto-generated method stub
-		
+		this.encapsulado.pagarViaje();
+
 	}
 
 	@Override
 	public void finalizarViaje() {
-		// TODO Auto-generated method stub
-		
+		this.encapsulado.finalizarViaje();
 	}
 }

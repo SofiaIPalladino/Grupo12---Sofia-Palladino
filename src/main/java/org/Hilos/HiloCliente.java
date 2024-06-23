@@ -14,14 +14,10 @@ import org.viaje.IViaje;
 public class HiloCliente extends Thread {
     private final int cantViajes;
     private Cliente cliente;
-    private GestionViajes gestionViajes;
-    private GestionPedidos gestionPedidos;
 
-    public HiloCliente(Cliente cliente, int cantViajes, GestionViajes gestionViajes, GestionPedidos gestionPedidos) {
+    public HiloCliente(Cliente cliente, int cantViajes) {
         this.cliente = cliente;
         this.cantViajes = cantViajes;
-        this.gestionViajes = gestionViajes;
-        this.gestionPedidos = gestionPedidos;
     }
 
     @Override
@@ -37,22 +33,24 @@ public class HiloCliente extends Thread {
                 pedido = new Pedido("Zona Peligrosa", true, "usoBaul", 3, this.cliente, 20);
                 contador++;
                 try {
-                    gestionPedidos.evaluarPedido(pedido);
+                    Empresa.getInstance().getGestionPedidos().evaluarPedido(pedido);
                     synchronized (empresa.getViajes()) {
-                        viaje = gestionViajes.convertirPedidoEnViaje(pedido);
-
+                        viaje = Empresa.getInstance().getGestionViajes().convertirPedidoEnViaje(pedido);
+                        Empresa.getInstance().getGestionViajes().agregarViaje(viaje);
                     }
-                    synchronized (empresa.getViajes()) {
+
+                    synchronized (viaje) {
                         while (!viaje.getStatus().equals("Iniciado")) {
-                            empresa.getViajes().wait();
+                            viaje.wait();
                         }
+                        System.out.println("salio de no Iniciado");
                         empresa.agregarInformacionAccionarHilos("El viaje del cliente " + this.cliente.getUsuario() + " ha iniciado");
                     }
-                    synchronized (empresa.getViajes()) {
-                        gestionViajes.pagarViaje(viaje);
+                    //synchronized (empresa.getViajes()) {
+                        Empresa.getInstance().getGestionViajes().pagarViaje(viaje);
                         empresa.agregarInformacionAccionarHilos("El cliente " + this.cliente.getUsuario() + " pagó el viaje");
-                        viaje.notifyAll();
-                    }
+                       // viaje.notifyAll();
+                  //  }
                 } catch (NoVehiculoException e) {
                     empresa.agregarInformacionAccionarHilos("No hay vehiculo disponible para el pedido del cliente " + this.cliente.getUsuario());
                 } catch (NoChoferException e) {
@@ -67,5 +65,8 @@ public class HiloCliente extends Thread {
             throw new RuntimeException(e);
         }
 
+        System.out.println(empresa.getInformacionAccionarHilos());
+
     }
+
 }

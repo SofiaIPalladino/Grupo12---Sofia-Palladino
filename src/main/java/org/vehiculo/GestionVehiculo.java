@@ -5,7 +5,6 @@ import org.viaje.IViaje;
 import org.pedido.Pedido;
 
 import java.util.*;
-import org.sistema.Empresa;
 
 
 public class GestionVehiculo extends Thread {
@@ -28,7 +27,9 @@ public class GestionVehiculo extends Thread {
                         return;
                     }
                 }
+                System.out.println("Hilo de vehiculos se despertó");
                 viaje = gestionViajes.getViajesPendientes().remove(0);
+                System.out.println("Viaje del vehiculo que se despertó: " + viaje);
             }
             try {
                 asignarVehiculo(viaje);
@@ -42,8 +43,10 @@ public class GestionVehiculo extends Thread {
     private void asignarVehiculo(IViaje viaje) throws InterruptedException {
         Vehiculo vehiculo = esperarVehiculoDisponible(viaje);
         synchronized (viaje) {
+            System.out.println("Entró a asignar vehiculo");
             viaje.asignarVehiculo(vehiculo);
             viaje.notifyAll();
+            System.out.println("Asignar vehiculo terminó");
         }
         Thread.sleep(2000);
         gestionViajes.agregarViajeConVehiculo(viaje);
@@ -68,7 +71,7 @@ public class GestionVehiculo extends Thread {
 
     private Map<Integer, Vehiculo> buscarVehiculosAptos(Pedido pedido) {
         Map<Integer, Vehiculo> vehiculosCumplen = new TreeMap<>(Comparator.reverseOrder());
-        List<Vehiculo> vehiculos = Empresa.getInstance().getVehiculos();
+        List<Vehiculo> vehiculos = this.gestionViajes.getVehiculos();
         for (Vehiculo vehiculo : vehiculos) {
             if (vehiculo.verificaPasajeros(pedido.getCantPersonas()) &&
                     vehiculo.verificaBaul(pedido.usoBaul()) &&
@@ -78,4 +81,5 @@ public class GestionVehiculo extends Thread {
         }
         return vehiculosCumplen;
     }
+
 }

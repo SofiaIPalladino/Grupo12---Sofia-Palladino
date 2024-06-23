@@ -11,15 +11,18 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GestionChofer {
-    Empresa empresa;
+    private List<Chofer> choferes;
+    private List<Chofer> choferesEnUso;
 
-    public GestionChofer(Empresa empresa) {
-        this.empresa = Empresa.getInstance();
+
+    public GestionChofer() {
+        this.choferes=new ArrayList<>();
+        this.choferesEnUso=new ArrayList<>();
     }
 
     private int cantidadChoferesTipo(Chofer choferTipo) {
         int count = 0;
-        for (Chofer chofer : empresa.getChoferes()) {
+        for (Chofer chofer : Empresa.getInstance().getChoferes()) {
             if (chofer.getClass().equals(choferTipo.getClass())) {
                 count++;
             }
@@ -29,8 +32,8 @@ public class GestionChofer {
 
     public void agregaChofer(Chofer c) throws MaximoChoferesTipoException {
         int cantidadChoferesMismoTipo = this.cantidadChoferesTipo(c);
-        if (cantidadChoferesMismoTipo <  this.empresa.getCantidadMaximaChoferesTipo())
-            this.empresa.getChoferes().add(c);
+        if (cantidadChoferesMismoTipo < Empresa.getInstance().getCantidadMaximaChoferesTipo())
+            this.choferes.add(c);
         else
             throw new MaximoChoferesTipoException();
     }
@@ -39,7 +42,7 @@ public class GestionChofer {
         List<IViaje> viajes = this.getViajesChofer(chofer);
         ArrayList<Cliente> clientes = new ArrayList<>();
         if (!viajes.isEmpty()) {
-            Iterator<IViaje> iterator = this.empresa.getViajes().iterator();
+            Iterator<IViaje> iterator = Empresa.getInstance().getViajes().iterator();
             while (iterator.hasNext()) {
                 IViaje viaje = iterator.next();
                 if (!clientes.contains(viaje.getCliente()))
@@ -51,7 +54,7 @@ public class GestionChofer {
 
     public List<IViaje> getViajesChofer(Chofer chofer) {
         ArrayList<IViaje> viajesChofer = new ArrayList<>();
-        Iterator<IViaje> iterator = this.empresa.getViajes().iterator();
+        Iterator<IViaje> iterator = Empresa.getInstance().getViajes().iterator();
         while (iterator.hasNext()) {
             IViaje viaje = iterator.next();
             if (viaje.getChofer() != null && viaje.getChofer().getDni().equals(chofer.getDni())) {
@@ -60,5 +63,23 @@ public class GestionChofer {
         }
         return viajesChofer;
     }
+
+    public synchronized List<Chofer> getChoferes() {
+        return choferes;
+    }
+
+    public List<Chofer> getChoferesEnUso() {
+        return choferesEnUso;
+    }
+
+    public void setChoferesEnUso(List<Chofer> choferesEnUso) {
+        this.choferesEnUso = choferesEnUso;
+    }
+
+    public void setChoferes(List<Chofer> choferes) {
+        this.choferes = choferes;
+    }
+
+
 
 }

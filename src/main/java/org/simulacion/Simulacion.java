@@ -21,6 +21,7 @@ import org.vehiculo.Combi;
 import org.vehiculo.GestionVehiculo;
 import org.vehiculo.Moto;
 import org.viaje.GestionViajes;
+import org.vista.VentanaInicio;
 
 import java.io.IOException;
 
@@ -29,8 +30,6 @@ public class Simulacion {
     public static void main(String[] args) throws MaximoChoferesTipoException {
         Empresa empresa = Empresa.getInstance();
         GestionUsuario gestionUsuario=new GestionUsuario();
-        GestionViajes gestionViajes=new GestionViajes();
-        GestionPedidos gestionPedidos=new GestionPedidos();
 
 
         int cantClientes = 2;
@@ -56,8 +55,9 @@ public class Simulacion {
         //Thread hiloChofer2 = new Thread(choferC1);
         //Thread hiloChofer3 = new Thread(choferP1);
 
-        HiloChofer hiloChofer1= new HiloChofer(choferT1,gestionViajes);
-        HiloCliente hiloCliente1= new HiloCliente(cliente1,3,gestionViajes,gestionPedidos);
+        HiloChofer hiloChofer1= new HiloChofer(choferT1,empresa.getGestionViajes());
+        HiloCliente hiloCliente1= new HiloCliente(cliente1,3);
+        empresa.agregaChofer(choferT1);
         //hiloChofer1.start();
         //hiloChofer2.start();
         //hiloChofer3.start();
@@ -80,12 +80,13 @@ public class Simulacion {
         gestionUsuario.agregaUsuario("sofi1", "1234", "Sofia1", "Palladino");
         gestionUsuario.agregaUsuario("sofi2", "1234", "Sofia2", "Palladino");
 
-        //  new VentanaInicio().setVisible(true);
-        // new VentanaInicio().setVisible(true);
-        //new VentanaGestionPedidos().setVisible(true);
+      //    new VentanaInicio().setVisible(true);
+      //    new VentanaInicio().setVisible(true);
+      //    new VentanaGestionPedidos().setVisible(true);
 
-        hiloCliente1.run();
-        hiloChofer1.run();
+        hiloCliente1.start();
+        hiloChofer1.start();
+
 
         IPersistencia persistencia = new PersistenciaXML();
 

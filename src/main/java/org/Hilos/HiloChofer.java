@@ -22,10 +22,10 @@ public class HiloChofer extends Thread {
         try {
             while (true) {
                 IViaje viaje = gestionViajes.obtenerViajeConVehiculo(chofer);
-                if (viaje != null) {
                     synchronized (viaje) {
                         chofer.setEstado("Ocupado");
                         Thread.sleep(2000);
+                        System.out.println("Estado del viaje: "+viaje.getStatus());
                         viaje.iniciarViaje(chofer);
                         gestionViajes.notificarCambios(viaje);
                         System.out.println("Chofer asignado con éxito");
@@ -35,7 +35,6 @@ public class HiloChofer extends Thread {
                     realizarViaje(viaje);
                     chofer.setEstado("Libre");
                 }
-            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.out.println("ChoferThread interrumpido");
@@ -44,6 +43,7 @@ public class HiloChofer extends Thread {
 
     private void realizarViaje(IViaje viaje) {
         synchronized (viaje) {
+            viaje.notify();
             System.out.println("Entró a realizar Viaje");
             try {
                 while (!viaje.getStatus().equals("Pagado")) {

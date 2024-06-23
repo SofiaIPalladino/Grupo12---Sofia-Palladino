@@ -2,12 +2,10 @@ package org.sistema;
 
 
 import org.chofer.Chofer;
+import org.chofer.GestionChofer;
 import org.controladores.ControladorPedido;
 import org.controladores.ControladorChofer;
-import org.excepciones.NoChoferException;
-import org.excepciones.NoVehiculoException;
-import org.excepciones.UsuarioExistenteException;
-import org.excepciones.ViajeNoEncontradoException;
+import org.excepciones.*;
 import org.pedido.GestionPedidos;
 import org.pedido.Pedido;
 import org.usuario.Administrador;
@@ -32,15 +30,14 @@ public class Empresa extends Observable {
     private List<Cliente> clientes;
     private List<Usuario> usuarios;
 
-    private List<Chofer> choferes;
-    private List<Chofer> choferesEnUso;
-
-    private List<Vehiculo> vehiculos;
     private List<Vehiculo> vehiculosEnUso;
 
     private List<IViaje> viajesSinChoferes;
     private GestionViajes gestionViajes;
     private GestionPedidos gestionPedidos;
+
+
+    private GestionChofer gestionChofer;
 
     private double recaudado = 0;
 
@@ -55,13 +52,14 @@ public class Empresa extends Observable {
     private Empresa() {
         //viajes = new ArrayList<IViaje>();
         vehiculosEnUso = new ArrayList<Vehiculo>();
-        vehiculos = new ArrayList<Vehiculo>();
-        choferes = new ArrayList<Chofer>();
-        choferesEnUso = new ArrayList<Chofer>();
         clientes = new ArrayList<Cliente>();
         usuarios = new ArrayList<Usuario>();
         //pedidos = new ArrayList<Pedido>();
-        viajesSinChoferes = new ArrayList<IViaje>();
+     //   viajesSinChoferes = new ArrayList<IViaje>();
+        gestionPedidos=new GestionPedidos();
+        gestionViajes=new GestionViajes();
+        gestionChofer=new GestionChofer();
+
     }
 
     public static synchronized Empresa getInstance() {
@@ -83,7 +81,11 @@ public class Empresa extends Observable {
         setChanged();
         notifyObservers();
     }
-    
+
+    public GestionChofer getGestionChofer() {
+        return gestionChofer;
+    }
+
     public int getCantidadMaximaSolicitudesPorCliente() {
         return this.cantidadMaximaSolicitudesPorCliente;
     }
@@ -107,7 +109,15 @@ public class Empresa extends Observable {
     public void setCantidadMaximaChoferesTipo(int cantidadMaximaChoferesTipo) {
         this.cantidadMaximaChoferesTipo = cantidadMaximaChoferesTipo;
     }
-    
+
+    public void agregaChofer(Chofer chofer) throws MaximoChoferesTipoException {
+        gestionChofer.agregaChofer(chofer);
+    }
+
+    public void agregaVehiculo(Vehiculo vehiculo){
+        gestionViajes.agregarVehiculos(vehiculo);
+    }
+
     //para testear
     public void agregaCliente(String usuario, String contrasenia, String nombre, String apellido) {
         Cliente cliente= new Cliente(usuario,contrasenia,nombre,apellido);
@@ -130,20 +140,8 @@ public class Empresa extends Observable {
         return clientes;
     }
 
-    public synchronized List<Chofer> getChoferes() {
-        return choferes;
-    }
-
-    public synchronized List<Vehiculo> getVehiculos() {
-        return vehiculos;
-    }
-
     public void setUsuariolog(String usuariolog) {
         this.usuariolog = usuariolog;
-    }
-
-    public List<Chofer> getChoferesEnUso() {
-        return choferesEnUso;
     }
 
     public List<Usuario> getUsuario() {
@@ -187,18 +185,6 @@ public class Empresa extends Observable {
         this.vehiculosEnUso = vehiculosEnUso;
     }
 
-    public void setVehiculos(List<Vehiculo> vehiculos) {
-        this.vehiculos = vehiculos;
-    }
-
-    public void setChoferesEnUso(List<Chofer> choferesEnUso) {
-        this.choferesEnUso = choferesEnUso;
-    }
-
-    public void setChoferes(List<Chofer> choferes) {
-        this.choferes = choferes;
-    }
-
     public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
@@ -207,7 +193,11 @@ public class Empresa extends Observable {
         this.clientes = clientes;
     }
 
-    public static void setInstance(Empresa instance) {
+    public List<Vehiculo> getVehiculos(){
+        return gestionViajes.getVehiculos();
+    }
+
+    /*public static void setInstance(Empresa instance) {
         Empresa.instance = instance;
     }
 
@@ -235,11 +225,6 @@ public class Empresa extends Observable {
         return gestionPedidos.getPedidos();
     }
 
-    public synchronized void agregaChofer(Chofer c) {
-        this.choferes.add(c);
-        new ControladorChofer(this,c);
-    }
-
     public synchronized void agregaVehiculo(Vehiculo v) {
         this.vehiculos.add(v);
     }
@@ -247,7 +232,7 @@ public class Empresa extends Observable {
     public synchronized void pagarViaje(IViaje viaje) throws ViajeNoEncontradoException {
         gestionViajes.pagarViaje(viaje);
     }
-
+*/
     public void notificarCambios(IViaje viaje) {
         setChanged();
         notifyObservers(viaje);
@@ -269,6 +254,9 @@ public class Empresa extends Observable {
         gestionPedidos.evaluarPedido(p);
     }
 
+    public List<Chofer> getChoferes() {
+        return gestionChofer.getChoferes();
+    }
 }
 
 	

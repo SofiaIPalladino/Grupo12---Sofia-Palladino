@@ -1,6 +1,5 @@
 package org.viaje;
 
-
 import org.chofer.Chofer;
 import org.pedido.Pedido;
 import org.usuario.Cliente;
@@ -155,6 +154,7 @@ public abstract class Viaje extends Observable implements IViaje, Serializable {
 	}
 
 	public synchronized void iniciarViaje(Chofer chofer) {
+		System.out.println("Entró a iniciar viaje de Viaje");
 		this.setChofer(chofer);
 		this.setStatus("Iniciado");
 		System.out.println("CAMBIO ESTADO A INICIADO");
