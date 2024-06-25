@@ -6,13 +6,14 @@ import org.pedido.Pedido;
 import org.usuario.Cliente;
 import org.vehiculo.Vehiculo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Observable;
 
 /**
  * Interfaz que modela una parte del comportamiento de los viajes.<br>
  */
-public interface IViaje extends Comparable<IViaje>{
+public interface IViaje extends Comparable<IViaje>, Serializable {
 
     Vehiculo getVehiculo();
     void setVehiculo(Vehiculo vehiculo);
@@ -33,7 +34,6 @@ public interface IViaje extends Comparable<IViaje>{
     void asignarVehiculo(Vehiculo vehiculo);
     void pagarViaje();
     void finalizarViaje();
-    public Object clone() throws CloneNotSupportedException;
-
+    Object clone() throws CloneNotSupportedException;
     
 }

@@ -1,5 +1,7 @@
 package org.simulacion;
 
+import org.controladores.ControladorChofer;
+import org.controladores.ControladorCliente;
 import org.hilos.HiloChofer;
 import org.hilos.HiloCliente;
 import org.chofer.Chofer;
@@ -7,7 +9,7 @@ import org.chofer.ChoferContratado;
 import org.chofer.ChoferPermanente;
 import org.chofer.ChoferTemporario;
 import org.excepciones.MaximoChoferesTipoException;
-import org.pedido.GestionPedidos;
+import org.hilos.HiloSistema;
 import org.persistencia.EmpresaDTO;
 import org.persistencia.IPersistencia;
 import org.persistencia.PersistenciaXML;
@@ -15,10 +17,8 @@ import org.sistema.Empresa;
 import org.sistema.Fecha;
 import org.usuario.Cliente;
 import org.usuario.GestionUsuario;
-import org.usuario.Usuario;
 import org.vehiculo.Automovil;
 import org.vehiculo.Combi;
-import org.vehiculo.GestionVehiculo;
 import org.vehiculo.Moto;
 import org.viaje.GestionViajes;
 import org.vista.VentanaInicio;
@@ -29,8 +29,6 @@ import java.io.IOException;
 public class Simulacion {
     public static void main(String[] args) throws MaximoChoferesTipoException {
         Empresa empresa = Empresa.getInstance();
-        GestionUsuario gestionUsuario=new GestionUsuario();
-
 
         int cantClientes = 2;
         int cantidadUnidadesCadaTipo = 2;
@@ -57,6 +55,7 @@ public class Simulacion {
 
         HiloChofer hiloChofer1= new HiloChofer(choferT1,empresa.getGestionViajes());
         HiloCliente hiloCliente1= new HiloCliente(cliente1,3);
+
         empresa.agregaChofer(choferT1);
         //hiloChofer1.start();
         //hiloChofer2.start();
@@ -77,17 +76,27 @@ public class Simulacion {
         empresa.agregaVehiculo(combi2);
 
         //Clientes
-        gestionUsuario.agregaUsuario("sofi1", "1234", "Sofia1", "Palladino");
-        gestionUsuario.agregaUsuario("sofi2", "1234", "Sofia2", "Palladino");
+        empresa.agregaUsuario("sofi1", "1234", "Sofia1", "Palladino");
+        empresa.agregaUsuario("sofi2", "1234", "Sofia2", "Palladino");
+
+//        ControladorCliente controladorCliente=new ControladorCliente();
+//        ControladorChofer controladorChofer=new ControladorChofer(choferT1);
 
       //    new VentanaInicio().setVisible(true);
       //    new VentanaInicio().setVisible(true);
       //    new VentanaGestionPedidos().setVisible(true);
 
+        //GestionViajes gestionViajes=new GestionViajes();
+        //HiloSistema hiloSistema=new HiloSistema(gestionViajes);
+
         hiloCliente1.start();
         hiloChofer1.start();
+        //hiloSistema.start();
 
 
+        //String log = Empresa.getInstance().obtenerInformacionAccionarHilos();
+        //System.out.println("Log de acciones de hilos:\n" + log);
+        /*
         IPersistencia persistencia = new PersistenciaXML();
 
         try {
@@ -110,5 +119,7 @@ public class Simulacion {
 
         } catch (Exception e3) {
         }
+
+         */
     }
 }

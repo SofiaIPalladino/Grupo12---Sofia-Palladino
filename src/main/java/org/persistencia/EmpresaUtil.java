@@ -14,8 +14,15 @@ public class EmpresaUtil {
         EmpresaDTO edto= new EmpresaDTO(
                 empresa.getClientes(),
                 empresa.getUsuarios(),
-                empresa.getViajes(),
-                empresa.getRecaudado()
+                empresa.getRecaudado(),
+                empresa.getGestionViajes(),
+                empresa.getGestionChofer(),
+                empresa.getGestionPedidos(),
+                empresa.getGestionUsuario(),
+                empresa.getCantidadMaximaSolicitudesPorCliente(),
+                empresa.getCantidadMaximaChoferesTipo(),
+                empresa.getCantidadMaximaSolicitudesPorChofer(),
+                empresa.getInformacionAccionarHilos()
         );
         return edto;
     }
@@ -26,8 +33,15 @@ public class EmpresaUtil {
      */
     public static void creoEmpresa(EmpresaDTO dto) {
         Empresa e = Empresa.getInstance();
-        e.setClientes(dto.getClientes());
-        e.setUsuarios(dto.getUsuarios());
         e.setRecaudado(dto.getRecaudado());
+        e.setGestionViajes(dto.getGestionViajes());
+        e.setGestionChofer(dto.getGestionChofer());
+        e.setGestionUsuario(dto.getGestionUsuario());
+        e.setGestionPedidos(dto.getGestionPedidos());
+        e.setCantidadMaximaChoferesTipo(dto.getCantidadMaximaChoferesTipo());
+        e.setCantidadMaximaSolicitudesPorCliente(dto.getCantidadMaximaSolicitudesPorCliente());
+        e.setCantidadMaximaSolicitudesPorChofer(dto.getCantidadMaximaSolicitudesPorChofer());
+        e.setInformacionAccionarHilos(dto.getInformacionAccionarHilos());
+        e.notificarCambios(dto.getInformacionAccionarHilos());
     }
 }

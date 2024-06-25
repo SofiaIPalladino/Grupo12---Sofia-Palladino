@@ -1,19 +1,10 @@
 package org.vista;
 
-import org.controladores.ControladorPedido;
-import org.excepciones.NoChoferException;
-import org.excepciones.NoVehiculoException;
-import org.pedido.Pedido;
-import org.usuario.Cliente;
-import org.viaje.IViaje;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
-public class VentanaPedido extends JFrame {
+public class VentanaPedido extends VentanaBase {
     private JComboBox<String> zonaComboBox;
     private JCheckBox mascotaCheckBox;
     private JCheckBox equipajeCheckBox;
@@ -21,17 +12,15 @@ public class VentanaPedido extends JFrame {
     private JTextField distanciaField;
     private JButton btnGuardarPedido;
     private JButton btnHistorialViajes;
-    private ControladorPedido controlador;
-    private Cliente cliente;
+    private ActionListener controlador;
 
-    public VentanaPedido(Cliente cliente) {
+
+    public VentanaPedido(ActionListener controlador) {
         // Configuración de la ventana
         setTitle("Ingresar Pedido");
         setSize(500, 400); // Tamaño de la ventana
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        this.cliente = cliente;
-        controlador = new ControladorPedido();
 
         setLayout(new GridLayout(7, 2, 10, 10));
 
@@ -55,72 +44,38 @@ public class VentanaPedido extends JFrame {
         distanciaField = new JTextField(10);
         add(distanciaField);
 
-        btnGuardarPedido = new JButton("Guardar Pedido");
+        btnGuardarPedido = new JButton("Hacer Pedido");
+        btnGuardarPedido.addActionListener(controlador);
         add(btnGuardarPedido);
 
-        btnHistorialViajes = new JButton("Ver Historial de Viajes");
+        btnHistorialViajes = new JButton("Ver Historial");
+        btnHistorialViajes.addActionListener(controlador);
         add(btnHistorialViajes);
 
         add(new JLabel(""));
 
-        btnGuardarPedido.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String zona = (String) zonaComboBox.getSelectedItem();
-                boolean mascota = mascotaCheckBox.isSelected();
-                boolean equipaje = equipajeCheckBox.isSelected();
-                int cantPersonas;
-                double distancia;
 
-                try {
-                    cantPersonas = Integer.parseInt(cantPersonasField.getText());
-                    if (cantPersonas <= 0 || cantPersonas > 10) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Por favor, ingrese un número entero válido entre 1 y 10 para la cantidad de personas.");
-                    return;
-                }
-
-                try {
-                    distancia = Double.parseDouble(distanciaField.getText());
-                    if (distancia < 0) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Por favor, ingrese un número decimal válido no negativo para la distancia.");
-                    return;
-                }
-
-                Pedido pedido = new Pedido(zona, mascota, equipaje ? "Baul" : "No Baul", cantPersonas, cliente, distancia);
-                try {
-                    controlador.evaluarPedido(pedido);
-                } catch (NoVehiculoException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
-                    return;
-                } catch (NoChoferException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
-                    return;
-                }
-                JOptionPane.showMessageDialog(null, "Pedido guardado exitosamente!");
-                controlador.convertirPedidoEnViaje(pedido);
-                dispose();
-            }
-        });
-
-
-        btnHistorialViajes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               List <IViaje> viajesFinalizados = controlador.getViajesFinalizadosCliente(cliente);
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        VentanaViajesFinalizados frame = new VentanaViajesFinalizados(viajesFinalizados);
-                        frame.setVisible(true);
-                    }
-                });
-            }
-        });
     }
+
+    public String getZona(){
+        return zonaComboBox.getSelectedItem().toString();
+    }
+
+    public boolean getMascota(){
+        return mascotaCheckBox.isSelected();
+    }
+
+    public boolean getEquipaje(){
+        return equipajeCheckBox.isSelected();
+    }
+
+    public int getCantPersonas(){
+        return Integer.parseInt(cantPersonasField.getText());
+    }
+
+    public double getDistancia(){
+        return Double.parseDouble(distanciaField.getText());
+    }
+
+
 }

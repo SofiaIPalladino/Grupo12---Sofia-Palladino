@@ -28,33 +28,29 @@ public class HiloCliente extends Thread {
         Empresa empresa = Empresa.getInstance();
         boolean ejecutar = true;
         try {
-            empresa.agregarInformacionAccionarHilos("El cliente " + this.cliente.getUsuario() + " se logueó");
+            //empresa.agregarInformacionAccionarHilos("El cliente " + this.cliente.getUsuario() + " se logueó");
             while (ejecutar && contador < this.cantViajes) {
                 pedido = new Pedido("Zona Peligrosa", true, "usoBaul", 3, this.cliente, 20);
                 contador++;
                 try {
                     Empresa.getInstance().getGestionPedidos().evaluarPedido(pedido);
-                    synchronized (empresa.getViajes()) {
                         viaje = Empresa.getInstance().getGestionViajes().convertirPedidoEnViaje(pedido);
                         Empresa.getInstance().getGestionViajes().agregarViaje(viaje);
-                    }
-
                     synchronized (viaje) {
                         while (!viaje.getStatus().equals("Iniciado")) {
                             viaje.wait();
                         }
-                        System.out.println("salio de no Iniciado");
-                        empresa.agregarInformacionAccionarHilos("El viaje del cliente " + this.cliente.getUsuario() + " ha iniciado");
+                      //  empresa.agregarInformacionAccionarHilos("El viaje del cliente " + this.cliente.getUsuario() + " ha iniciado");
                     }
                     //synchronized (empresa.getViajes()) {
                         Empresa.getInstance().getGestionViajes().pagarViaje(viaje);
-                        empresa.agregarInformacionAccionarHilos("El cliente " + this.cliente.getUsuario() + " pagó el viaje");
+                     //   empresa.agregarInformacionAccionarHilos("El cliente " + this.cliente.getUsuario() + " pagó el viaje");
                        // viaje.notifyAll();
                   //  }
                 } catch (NoVehiculoException e) {
-                    empresa.agregarInformacionAccionarHilos("No hay vehiculo disponible para el pedido del cliente " + this.cliente.getUsuario());
+                 //   empresa.agregarInformacionAccionarHilos("No hay vehiculo disponible para el pedido del cliente " + this.cliente.getUsuario());
                 } catch (NoChoferException e) {
-                    empresa.agregarInformacionAccionarHilos("No hay ningun chofer en la empresa");
+                  //  empresa.agregarInformacionAccionarHilos("No hay ningun chofer en la empresa");
                 } catch (ViajeNoEncontradoException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

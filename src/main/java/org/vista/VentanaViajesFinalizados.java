@@ -8,8 +8,10 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.List;
 
-public class VentanaViajesFinalizados extends JFrame {
+public class VentanaViajesFinalizados extends VentanaBase {
     private JTextField[] textFields;
+    private ActionListener controlador;
+    private JComboBox<IViaje> comboBox;
 
     public VentanaViajesFinalizados(List<IViaje> viajes) {
         setTitle("Historial de Viajes Finalizados");
@@ -25,11 +27,11 @@ public class VentanaViajesFinalizados extends JFrame {
         titleLabel.setBounds(50, 20, 300, 30); // Posición y tamaño de la etiqueta
         mainPanel.add(titleLabel);
 
-        JComboBox<IViaje> comboBox = new JComboBox<>(viajes.toArray(new IViaje[0]));
+        this.comboBox = new JComboBox<>(viajes.toArray(new IViaje[0]));
         comboBox.setBounds(50, 60, 300, 30);
         mainPanel.add(comboBox);
 
-        String[] labels = {"ESTADO","FECHA", "CHOFER", "COSTO", "VEHICULO", "ZONA", "MASCOTA", "EQUIPAJE", "CANTIDAD PERSONAS", "DISTANCIA"};
+        String[] labels = {"ESTADO", "FECHA", "CHOFER", "COSTO", "VEHICULO", "ZONA", "MASCOTA", "EQUIPAJE", "CANTIDAD PERSONAS", "DISTANCIA"};
         textFields = new JTextField[labels.length];
 
         int yPosition = 100;
@@ -49,14 +51,7 @@ public class VentanaViajesFinalizados extends JFrame {
 
         JButton closeButton = new JButton("CERRAR");
         closeButton.setBounds(150, 400, 100, 30); // Posición y tamaño del botón
-        closeButton.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
         mainPanel.add(closeButton);
-
         add(mainPanel);
 
         comboBox.addActionListener(new ActionListener() {
@@ -69,32 +64,45 @@ public class VentanaViajesFinalizados extends JFrame {
             }
         });
 
-        if (!viajes.isEmpty()) {
-            comboBox.setSelectedIndex(0);
-            updateTextFields(viajes.get(0));
-        }
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
     }
 
     private void updateTextFields(IViaje viaje) {
         textFields[0].setText(viaje.getStatus());
         Date fecha = viaje.getFecha();
-        textFields[1].setText(fecha.getHours() + ":"+fecha.getMinutes() + " - " + fecha.getDate() +"/"+  (fecha.getMonth()+1) +"/"+  (fecha.getYear() + 1900) );
-        if (viaje.getChofer()==null)
+        textFields[1].setText(fecha.getHours() + ":" + fecha.getMinutes() + " - " + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + (fecha.getYear() + 1900));
+        if (viaje.getChofer() == null)
             textFields[2].setText("Chofer Sin Asignar");
         else
             textFields[2].setText(viaje.getChofer().getNombre());
 
-        textFields[3].setText("$ "+viaje.getCosto());
-        if (viaje.getVehiculo()==null)
+        textFields[3].setText("$ " + viaje.getCosto());
+        if (viaje.getVehiculo() == null)
             textFields[4].setText("Vehiculo Sin Asignar");
         else
-            textFields[4].setText(viaje.getVehiculo().getNumpatente()+" - "+viaje.getVehiculo().getTipo());
+            textFields[4].setText(viaje.getVehiculo().getNumpatente() + " - " + viaje.getVehiculo().getTipo());
 
         textFields[5].setText(viaje.getZona());
         textFields[6].setText(viaje.getMascota());
         textFields[7].setText(viaje.getEquipaje());
         textFields[8].setText(String.valueOf(viaje.getCantidadPersonas()));
-        textFields[9].setText(String.valueOf(viaje.getDistanciaReal())+" km");
+        textFields[9].setText((viaje.getDistanciaReal()) + " km");
+    }
+
+    public void actualizarViaje(List<IViaje> historicoViajes) {
+        System.out.println("actualiza lista de viajes");
+        if (historicoViajes != null) {
+            System.out.println("Entra al if");
+            this.comboBox = new JComboBox<>(historicoViajes.toArray(new IViaje[0]));
+            comboBox.setSelectedIndex(0);
+            updateTextFields(historicoViajes.get(0));
+            comboBox.repaint();
+        }
     }
 }
 

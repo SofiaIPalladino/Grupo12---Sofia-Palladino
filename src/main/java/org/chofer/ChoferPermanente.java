@@ -23,10 +23,6 @@ public class ChoferPermanente extends Chofer {
      * Constructor para crear un ChoferPermanente.
      * @param dni El número de identificación del chofer.
      * @param nombre El nombre del chofer.
-     * @param sueldoBasico El sueldo básico del chofer permanente.
-     * @param plusXAntiguedad El porcentaje de aumento por antigüedad.
-     * @param plusXHijos El porcentaje de aumento por cantidad de hijos.
-     * @param aportes El porcentaje de descuento por aportes jubilatorios.
      * @param fechaIngreso La fecha de ingreso del chofer a la empresa.
      */
     public ChoferPermanente(String dni, String nombre, int cantHijos, Date fechaIngreso) {

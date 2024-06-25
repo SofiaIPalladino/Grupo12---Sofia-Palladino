@@ -20,10 +20,6 @@ public class ChoferTemporario extends Chofer {
      * Constructor para crear un ChoferTemporario.
      * @param dni El número de identificación del chofer.
      * @param nombre El nombre del chofer.
-     * @param sueldoBasico El sueldo básico del chofer temporario.
-     * @param aportes El porcentaje de descuento por aportes jubilatorios.
-     * @param plusXCantViajes El porcentaje de aumento por cantidad de viajes realizados.
-     * @param cantViajes La cantidad de viajes realizados por el chofer.
      */
 	public ChoferTemporario(String dni, String nombre) {	
 		super(dni, nombre);

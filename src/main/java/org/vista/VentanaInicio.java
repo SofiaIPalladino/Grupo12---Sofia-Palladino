@@ -2,61 +2,64 @@ package org.vista;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class VentanaInicio extends JFrame {
-    public VentanaInicio() {
+/**
+ * Clase que representa la ventana inicial de la aplicación de transporte.
+ */
+public class VentanaInicio extends VentanaBase {
+    private ActionListener controlador;
+
+    /**
+     * Constructor de la clase VentanaInicio.
+     */
+    public VentanaInicio(ActionListener controlador) {
         setTitle("Subí que te llevo");
-        setSize(400, 300);
+        setSize(600, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false);// Centrar la ventana en la pantalla
+        setResizable(false); // Evitar que la ventana sea redimensionable
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(null); // Usar Layout nulo para posicionar manualmente los componentes
 
+        // Etiqueta del título
         JLabel titleLabel = new JLabel("SUBÍ QUE TE LLEVO", SwingConstants.CENTER);
-        titleLabel.setBounds(100, 20, 200, 30); // Posición y tamaño de la etiqueta
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBounds(150, 30, 300, 40); // Centrar el título horizontalmente
         mainPanel.add(titleLabel);
 
-
+        // Panel para la imagen
         JPanel imagePanel = new JPanel();
         imagePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        imagePanel.setBounds(100, 70, 200, 150); // Posición y tamaño del panel de imagen
+        imagePanel.setBounds(200, 90, 200, 150); // Centrar el panel de la imagen horizontalmente
         imagePanel.setLayout(new BorderLayout()); // Usar BorderLayout para centrar la imagen
 
-        ImageIcon imageIcon = new ImageIcon("subiQueTeLlevo.png"); // Ruta a la imagen
+        // Cargar la imagen desde un archivo (asegúrate de tener el archivo subiQueTeLlevo.png en la ruta adecuada)
+        ImageIcon imageIcon = new ImageIcon("subiQueTeLlevo.png");
         JLabel imageLabel = new JLabel(imageIcon, SwingConstants.CENTER);
         imagePanel.add(imageLabel, BorderLayout.CENTER);
         mainPanel.add(imagePanel);
 
+        // Botón para registrarse
         JButton registrarButton = new JButton("REGISTRARSE");
-        registrarButton.setBounds(50, 230, 120, 30); // Posición y tamaño del botón
+        registrarButton.setBounds(100, 270, 120, 30); // Posición y tamaño del botón
         mainPanel.add(registrarButton);
+        registrarButton.addActionListener(controlador);
 
+        // Botón para iniciar sesión
         JButton loginButton = new JButton("LOGIN");
-        loginButton.setBounds(230, 230, 120, 30); // Posición y tamaño del botón
+        loginButton.setBounds(240, 270, 120, 30); // Posición y tamaño del botón
         mainPanel.add(loginButton);
+        loginButton.addActionListener(controlador);
 
-        registrarButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Abrir la ventana de registro y cerrar la actual
-                VentanaRegistro ventanaRegistro = new VentanaRegistro();
-                ventanaRegistro.setVisible(true);
-                dispose();
-            }
-        });
+        // Botón para persistir
+        JButton persistirButton = new JButton("LEVANTAR ARCHIVO");
+        persistirButton.setBounds(380, 270, 120, 30); // Posición y tamaño del botón
+        mainPanel.add(persistirButton);
+        persistirButton.addActionListener(controlador);
 
-        loginButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Abrir la ventana de login y cerrar la actual
-                VentanaLogin ventanaLogin = new VentanaLogin();
-                ventanaLogin.setVisible(true);
-                dispose();
-            }
-        });
-
+        // Agregar el panel principal a la ventana
         add(mainPanel);
     }
 }

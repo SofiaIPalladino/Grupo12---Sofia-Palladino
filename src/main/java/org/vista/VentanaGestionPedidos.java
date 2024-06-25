@@ -1,19 +1,26 @@
 package org.vista;
 
-import org.controladores.ControladorPedido;
 import org.viaje.IViaje;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class VentanaGestionPedidos extends JFrame{
-    private ControladorPedido controlador;
+/**
+ * Clase que representa la ventana de gestión de pedidos de viaje.
+ */
+public class VentanaGestionPedidos extends VentanaBase {
     private JPanel panelViajesActivos;
     private JPanel panelViajesFinalizados;
     private JButton botonCerrar;
+    private ActionListener controlador;
 
-    public VentanaGestionPedidos(ControladorPedido controlador) {
+    /**
+     * Constructor de la clase VentanaGestionPedidos.
+     *
+     * @param controlador ControladorPedido que gestiona la lógica de negocio de los pedidos.
+     */
+    public VentanaGestionPedidos(ActionListener controlador) {
         this.controlador = controlador;
         setTitle("Gestión de Pedidos");
         setSize(800, 600);
@@ -63,31 +70,40 @@ public class VentanaGestionPedidos extends JFrame{
         mainPanel.add(botonCerrar);
 
         add(mainPanel);
-        setVisible(true);
-
-        //muestraViajes();
-        //muestraViajesFinalizados();
     }
 
+    /**
+     * Método para actualizar el estado de los viajes mostrados en la ventana.
+     *
+     * @param viaje Viaje cuyo estado ha cambiado.
+     */
     public void actualizarEstado(IViaje viaje) {
-        if (viaje.getStatus().equals("Finalizado")){
+        if (viaje.getStatus().equals("Finalizado")) {
             agregarViajeFinalizado(viaje);
-            controlador.quitarViajeActivo(viaje);
         }
         panelViajesActivos.removeAll();
-        for (IViaje viajeActivo : controlador.getViajesActivos()) {
-            panelViajesActivos.add(new JLabel(informacionViaje(viajeActivo)));
-        }
+
         panelViajesActivos.revalidate();
         panelViajesActivos.repaint();
     }
 
-    private void agregarViajeFinalizado(IViaje viaje){
+    /**
+     * Método para agregar un viaje finalizado al panel correspondiente.
+     *
+     * @param viaje Viaje finalizado a agregar.
+     */
+    private void agregarViajeFinalizado(IViaje viaje) {
         panelViajesFinalizados.add(new JLabel(informacionViaje(viaje)));
         panelViajesFinalizados.revalidate();
         panelViajesFinalizados.repaint();
     }
 
+    /**
+     * Método para obtener la información detallada de un viaje.
+     *
+     * @param viaje Viaje del cual obtener la información.
+     * @return Cadena con la información detallada del viaje.
+     */
     private String informacionViaje(IViaje viaje) {
         StringBuilder sb = new StringBuilder();
         String vehiculo;

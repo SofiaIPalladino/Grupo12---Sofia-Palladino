@@ -5,18 +5,22 @@ import org.usuario.Cliente;
 import org.viaje.IViaje;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Map;
 
-public class VentanaChofer extends JFrame {
+/**
+ * Clase que representa la ventana de visualización de información para un chofer.
+ */
+public class VentanaChofer extends VentanaBase {
     private JPanel panelViajes;
     private JPanel panelClientes;
     private JPanel panelViajesFinalizados;
-    private JButton botonCerrar;
-    private ControladorChofer controlador;
 
-    public VentanaChofer(ControladorChofer controlador) {
-        this.controlador = controlador;
-        setTitle("Chofer: " + controlador.getChofer().getNombre());
+    /**
+     * Constructor de la clase VentanaChofer.
+     */
+    public VentanaChofer(String nombreChofer) {
         setSize(1024, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -27,7 +31,7 @@ public class VentanaChofer extends JFrame {
         mainPanel.setLayout(null);
 
         // Título
-        JLabel titleLabel = new JLabel("CHOFER: " + controlador.getChofer().getNombre(), SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("CHOFER: "+ nombreChofer, SwingConstants.CENTER);
         titleLabel.setBounds(250, 20, 300, 30);
         mainPanel.add(titleLabel);
 
@@ -53,12 +57,10 @@ public class VentanaChofer extends JFrame {
         scrollPaneViajesFinalizados.setBounds(50, 300, 700, 150);
         mainPanel.add(scrollPaneViajesFinalizados);
 
-
         // Panel de Clientes
         JLabel clientesLabel = new JLabel("CLIENTES");
         clientesLabel.setBounds(50, 460, 100, 30);
         mainPanel.add(clientesLabel);
-
 
         panelClientes = new JPanel();
         panelClientes.setLayout(new BoxLayout(panelClientes, BoxLayout.Y_AXIS));
@@ -66,40 +68,26 @@ public class VentanaChofer extends JFrame {
         scrollPaneClientes.setBounds(50, 500, 700, 150);
         mainPanel.add(scrollPaneClientes);
 
-        // Botón Cerrar
-        botonCerrar = new JButton("CERRAR");
-        botonCerrar.setBounds(350, 660, 100, 30);
-        botonCerrar.addActionListener(e -> dispose());
-        mainPanel.add(botonCerrar);
-
         add(mainPanel);
     }
 
-    private void agregaViajeFinalizado(IViaje viaje){
+    public void agregaViajeFinalizado(IViaje viaje){
         panelViajesFinalizados.add(new JLabel(informacionViaje(viaje)));
-        agregaCliente(viaje.getCliente());
         panelViajesFinalizados.revalidate();
         panelViajesFinalizados.repaint();
     }
 
     public void muestraViajes(IViaje viaje) {
         panelViajes.removeAll();
-        if (viaje.getStatus().equals("Finalizado"))
-            agregaViajeFinalizado(viaje);
-        else
+        if (!viaje.getStatus().equals("Finalizado"))
             panelViajes.add(new JLabel(informacionViaje(viaje)));
         panelViajes.revalidate();
         panelViajes.repaint();
     }
 
-    private void agregaCliente(Cliente cliente){
-        if (!controlador.getClientesChofer().containsKey(cliente)) {
-            controlador.agregarClienteChofer(cliente);
-        }
-        else
-            controlador.agregarViajeCliente(cliente);
+    public void actualizarClientes(Map<Cliente, Integer> clientesChofer){
         panelClientes.removeAll();
-        for (Map.Entry<Cliente, Integer> entry : controlador.getClientesChofer().entrySet()) {
+        for (Map.Entry<Cliente, Integer> entry : clientesChofer.entrySet()) {
             Cliente clienteHashMap = entry.getKey();
             Integer cantidadViajes = entry.getValue();
             panelClientes.add(new JLabel(informacionCliente(clienteHashMap) + " - Cantidad de Viajes: " + cantidadViajes));
@@ -108,6 +96,37 @@ public class VentanaChofer extends JFrame {
         panelClientes.repaint();
     }
 
+    public void actualizarDatosChofer(IViaje viajeAct, List<IViaje> viajesFinalizados) {
+        panelViajesFinalizados.removeAll();
+        for (IViaje v : viajesFinalizados){
+            panelViajesFinalizados.add(new JLabel(informacionViaje(v)));
+        }
+        //agregaCliente(viaje.getCliente());
+        panelViajesFinalizados.revalidate();
+        panelViajesFinalizados.repaint();
+        panelViajes.removeAll();
+        panelViajes.add(new JLabel(informacionViaje(viajeAct)));
+        panelViajes.revalidate();
+        panelViajes.repaint();
+    }
+
+    public void actualizarViajeChofer(Map<Cliente, Integer> mapaCliente) {
+        panelClientes.removeAll();
+        for (Map.Entry<Cliente, Integer> entry : mapaCliente.entrySet()) {
+            Cliente clienteHashMap = entry.getKey();
+            Integer cantidadViajes = entry.getValue();
+            panelClientes.add(new JLabel(informacionCliente(clienteHashMap) + " - Cantidad de Viajes: " + cantidadViajes));
+        }
+        panelClientes.revalidate();
+        panelClientes.repaint();
+    }
+
+    /**
+     * Método que devuelve la información de un viaje.
+     *
+     * @param viaje Viaje del cual obtener la información.
+     * @return Información del viaje.
+     */
     private String informacionViaje(IViaje viaje) {
         StringBuilder sb = new StringBuilder();
         String vehiculo;
@@ -125,6 +144,12 @@ public class VentanaChofer extends JFrame {
         return sb.toString();
     }
 
+    /**
+     * Método que devuelve la información de un cliente.
+     *
+     * @param cliente Cliente del cual obtener la información.
+     * @return Información del cliente.
+     */
     private String informacionCliente(Cliente cliente) {
         return "Nombre: " + cliente.getNombre() + " | Apellido: " + cliente.getApellido() + " | Usuario: " + cliente.getUsuario();
     }

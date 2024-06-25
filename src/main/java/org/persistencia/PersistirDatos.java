@@ -1,9 +1,10 @@
 package org.persistencia;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 public class PersistirDatos {
-    IPersistencia persistencia = new PersistenciaXML();
+    IPersistencia<Serializable> persistencia = new PersistenciaXML();
 
     public void persistoDatos() throws IOException {
         persistencia.abrirOutput("empresa.xml");

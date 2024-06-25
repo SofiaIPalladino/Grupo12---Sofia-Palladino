@@ -12,7 +12,7 @@ import java.util.Observable;
 /**
  * Clase abstracta que modela las caracteristicas y el comportamoiento de los viajes.<br>
  */
-public abstract class Viaje extends Observable implements IViaje, Serializable {
+public abstract class Viaje extends Observable implements IViaje,Serializable{
 	
 	protected String status;
 	protected Pedido pedido;
@@ -20,8 +20,26 @@ public abstract class Viaje extends Observable implements IViaje, Serializable {
 	protected Cliente cliente;
 	protected double distanciaReal,costo;
 	protected static double costoBase=1000;
+
+	protected int cantPersonas;
 	protected Vehiculo vehiculo;
 	protected Date fecha;
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public void setCosto(double costo) {
+		this.costo = costo;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
 
 
 	public Viaje(){
@@ -34,6 +52,7 @@ public abstract class Viaje extends Observable implements IViaje, Serializable {
 		this.fecha = new Date();
 		this.distanciaReal=pedido.getDistancia();
 		this.cliente=pedido.getCliente();
+		this.cantPersonas = pedido.getCantPersonas();
 		this.setStatus("Solicitado");
 	}
 
@@ -42,11 +61,11 @@ public abstract class Viaje extends Observable implements IViaje, Serializable {
      * <br> Precondicion: parametro mayor a 0.<br>
      * @param dist: nuevo valor a asignar.<br>
      */
-	protected void setDistanciaReal(double dist) {
+	public void setDistanciaReal(double dist) {
 		this.distanciaReal=dist;	
 	}
-	
-	protected static double getCostoBase() {
+
+	public static double getCostoBase() {
 		return Viaje.costoBase;
 	}
 	
@@ -55,7 +74,7 @@ public abstract class Viaje extends Observable implements IViaje, Serializable {
 	 * <br> Precondicion: parametro mayor a 0.<br>
 	 * @param costoBase: nuevo valor a asignar.<br>
 	 */
-	protected static void setCostoBase(double costoBase) {
+	public static void setCostoBase(double costoBase) {
 		Viaje.costoBase=costoBase;
 	}
 
@@ -84,7 +103,7 @@ public abstract class Viaje extends Observable implements IViaje, Serializable {
 		return this.chofer;
 	}
 
-	public synchronized void setStatus(String s) {
+	public void setStatus(String s) {
 		this.status=s;
 		setChanged();
 		notifyObservers();
@@ -119,7 +138,7 @@ public abstract class Viaje extends Observable implements IViaje, Serializable {
 
 	}
 	public int getCantidadPersonas(){
-		return this.pedido.getCantPersonas();
+		return this.cantPersonas;
 	}
 
 	/**
@@ -153,25 +172,24 @@ public abstract class Viaje extends Observable implements IViaje, Serializable {
 		return rta;
 	}
 
-	public synchronized void iniciarViaje(Chofer chofer) {
-		System.out.println("Entró a iniciar viaje de Viaje");
+	public void iniciarViaje(Chofer chofer) {
 		this.setChofer(chofer);
 		this.setStatus("Iniciado");
 		System.out.println("CAMBIO ESTADO A INICIADO");
 	}
 
-	public synchronized void asignarVehiculo(Vehiculo vehiculo){
+	public void asignarVehiculo(Vehiculo vehiculo){
 		this.setVehiculo(vehiculo);
 		this.setStatus("Con Vehículo");
 		System.out.println("CAMBIO ESTADO A CON VEHÍCULO");
 	}
 
-	public synchronized void pagarViaje() {
+	public void pagarViaje() {
 		this.setStatus("Pagado");
 		System.out.println("CAMBIO ESTADO A PAGADO");
 	}
 
-	public synchronized void finalizarViaje() {
+	public void finalizarViaje() {
 		this.setStatus("Finalizado");
 		System.out.println("CAMBIO ESTADO A FINALIZADO");
 	}
@@ -181,5 +199,13 @@ public abstract class Viaje extends Observable implements IViaje, Serializable {
 		Viaje clon= (Viaje) super.clone();
 		clon.pedido = (Pedido) this.pedido.clone();
 		return clon;
+	}
+
+	public int getCantPersonas() {
+		return cantPersonas;
+	}
+
+	public void setCantPersonas(int cantPersonas) {
+		this.cantPersonas = cantPersonas;
 	}
 }

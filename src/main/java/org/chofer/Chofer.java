@@ -1,5 +1,6 @@
 package org.chofer;
 
+import org.usuario.Usuario;
 import org.viaje.IViaje;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.List;
  * Clase abstracta que representa a un chofer de la empresa.
  * Esta clase define las características comunes para todos los choferes y declara un método abstracto para obtener el sueldo.
  */
-public abstract class Chofer implements Serializable{
+public abstract class Chofer implements Serializable,Comparable<Chofer>{
 
     protected String dni;
     protected String nombre;
@@ -22,6 +23,14 @@ public abstract class Chofer implements Serializable{
 
     public Chofer() {
 
+    }
+
+    public void setKm(double km) {
+        this.km = km;
+    }
+
+    public String getEstado() {
+        return estado;
     }
 
     /**
@@ -101,5 +110,10 @@ public abstract class Chofer implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
         //notifyAll();
+    }
+
+    @Override
+    public int compareTo(Chofer otroChofer) {
+        return this.dni.compareTo(otroChofer.dni);
     }
 }

@@ -1,33 +1,26 @@
 package org.vista;
 
-import org.controladores.ControladorUsuario;
-import org.excepciones.UsuarioExistenteException;
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class VentanaRegistro extends JFrame {
+public class VentanaRegistro extends VentanaBase {
     private JTextField nombreField;
     private JTextField apellidoField;
     private JTextField usuarioField;
     private JPasswordField contraseniaField;
     private JButton btnRegistrar;
     private JButton btnSiguiente;
-    private ControladorUsuario controlador;
+    private ActionListener controlador;
 
-    public VentanaRegistro() {
+    public VentanaRegistro(ActionListener controlador) {
         // Configuración de la ventana
         setTitle("Ventana de Registro");
         setSize(300, 200);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        // Inicializar el controlador
-        controlador = new ControladorUsuario();
 
         // Configuración del layout
         setLayout(new FlowLayout());
@@ -52,10 +45,12 @@ public class VentanaRegistro extends JFrame {
         btnRegistrar = new JButton("Registrar");
         btnRegistrar.setEnabled(false); // Deshabilitar el botón de registrar inicialmente
         add(btnRegistrar);
+        btnRegistrar.addActionListener(controlador);
 
+        /*
         btnSiguiente = new JButton("Siguiente");
         btnSiguiente.setEnabled(false); // Deshabilitar el botón de siguiente hasta que el registro sea exitoso
-        add(btnSiguiente);
+        add(btnSiguiente);*/
 
         // Agregar DocumentListener a los campos de texto
         DocumentListener documentListener = new DocumentListener() {
@@ -83,38 +78,22 @@ public class VentanaRegistro extends JFrame {
         apellidoField.getDocument().addDocumentListener(documentListener);
         contraseniaField.getDocument().addDocumentListener(documentListener);
 
-        // Agregar ActionListener para el botón de registrar
-        btnRegistrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nombre = nombreField.getText();
-                String apellido = apellidoField.getText();
-                String usuario = usuarioField.getText();
-                String contrasenia = new String(contraseniaField.getPassword());
+    }
 
-                try{
-                    controlador.registrarUsuario(usuario, nombre, apellido, contrasenia);
-                    JOptionPane.showMessageDialog(null, "Registro exitoso!");
-                    // Abrir la ventana de inicio y cerrar la actual
-                    VentanaInicio ventanaInicio = new VentanaInicio();
-                    ventanaInicio.setVisible(true);
-                    dispose();
-                } catch (UsuarioExistenteException ee) {
-                    JOptionPane.showMessageDialog(null, "El usuario ya existe.");
-                }
-            }
-        });
+    public String getUsuario(){
+        return usuarioField.getText();
+    }
 
-        // Agregar ActionListener para el botón de siguiente
-        btnSiguiente.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Abrir la ventana de inicio y cerrar la actual
-                VentanaInicio ventanaInicio = new VentanaInicio();
-                ventanaInicio.setVisible(true);
-                dispose();
-            }
-        });
+    public String getContrasenia(){
+        return contraseniaField.getText();
+    }
+
+    public String getNombre(){
+        return nombreField.getText();
+    }
+
+    public String getApellido(){
+        return apellidoField.getText();
     }
 }
 

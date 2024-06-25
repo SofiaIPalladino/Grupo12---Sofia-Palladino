@@ -3,7 +3,7 @@ import org.usuario.Usuario;
 import org.usuario.UsuarioFactory;
 
 import java.util.ArrayList;
-
+//no tiene uso, tengo que borrarlo
 public class SistemaLogueo{
 
     private ArrayList<Usuario> usuarios;

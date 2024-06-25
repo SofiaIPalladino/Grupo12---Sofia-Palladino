@@ -2,20 +2,16 @@ package org.persistencia;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * Clase que implementa la persistencia de datos en formato XML.
  */
-public class PersistenciaXML implements IPersistencia
-{
+public class PersistenciaXML implements IPersistencia<Serializable> {
     private XMLEncoder xmlEncoder;
     private XMLDecoder xmlDecoder;
-    private FileOutputStream fileoutput;
-    private FileInputStream fileinput;
+    private ObjectOutputStream objectOutput;
+    private ObjectInputStream objectInput;
 
 
     /**
@@ -25,11 +21,8 @@ public class PersistenciaXML implements IPersistencia
      * @throws IOException si ocurre un error al abrir el archivo
      */
     @Override
-    public void abrirInput(String nombre) throws IOException
-    {
-        fileinput = new FileInputStream(nombre);
-        xmlDecoder = new XMLDecoder(fileinput);
-
+    public void abrirInput(String nombre) throws IOException {
+        this.objectInput = new ObjectInputStream(new FileInputStream(nombre));
     }
 
     /**
@@ -39,12 +32,8 @@ public class PersistenciaXML implements IPersistencia
      * @throws IOException si ocurre un error al abrir el archivo
      */
     @Override
-    public void abrirOutput(String nombre) throws IOException
-    {
-        fileoutput = new FileOutputStream(nombre);
-        xmlEncoder = new XMLEncoder(fileoutput);
-
-
+    public void abrirOutput(String nombre) throws IOException {
+        this.objectOutput = new ObjectOutputStream(new FileOutputStream(nombre));
     }
 
     /**
@@ -53,9 +42,9 @@ public class PersistenciaXML implements IPersistencia
      * @throws IOException si ocurre un error al cerrar el archivo
      */
     @Override
-    public void cerrarOutput() throws IOException
-    {
-        this.xmlEncoder.close();
+    public void cerrarOutput() throws IOException {
+        if (this.objectOutput != null)
+            this.objectOutput.close();
     }
 
     /**
@@ -65,9 +54,9 @@ public class PersistenciaXML implements IPersistencia
      */
 
     @Override
-    public void cerrarInput() throws IOException
-    {
-        this.xmlDecoder.close();
+    public void cerrarInput() throws IOException {
+        if (this.objectInput != null)
+            this.objectInput.close();
     }
 
     /**
@@ -77,26 +66,22 @@ public class PersistenciaXML implements IPersistencia
      * @throws IOException si ocurre un error al escribir el objeto
      */
     @Override
-    public void escribir(Object objeto) throws IOException
-    {
-        xmlEncoder.writeObject(objeto);
-
+    public void escribir(Serializable objeto) throws IOException{
+        if (objectOutput != null)
+            objectOutput.writeObject(objeto);
     }
-
     /**
      * Lee un objeto del archivo de entrada en formato XML.
      *
      * @return objeto leído
-     * @throws IOException si ocurre un error al leer el objeto
+     * @throws IOException            si ocurre un error al leer el objeto
      * @throws ClassNotFoundException si la clase del objeto no se encuentra
      */
     @Override
-    public Object leer() throws IOException, ClassNotFoundException
-    {
-        Object objecto = null;
-        if (xmlDecoder != null)
-            objecto = (Serializable) xmlDecoder.readObject();
-
+    public Serializable leer() throws IOException, ClassNotFoundException {
+        Serializable objecto = null;
+        if (objectInput != null)
+            objecto = (Serializable) objectInput.readObject();
         return objecto;
     }
 }

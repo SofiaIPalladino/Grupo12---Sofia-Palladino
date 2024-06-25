@@ -1,27 +1,23 @@
 package org.vista;
 
-import org.controladores.ControladorUsuario;
-import org.excepciones.ViajeNoEncontradoException;
-
 import org.viaje.IViaje;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
-public class VentanaViajeActual extends JFrame{
+public class VentanaViajeActual extends VentanaBase{
     private JTextField[] textFields;
     private JButton botonPaga;
-    private ControladorUsuario controlador;
+    private ActionListener controlador;
+    private JButton closeButton;
 
-    public VentanaViajeActual(IViaje viaje,ControladorUsuario controlador) {
+    public VentanaViajeActual(ActionListener controlador) {
         setTitle("Información Viaje Actual");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centrar la ventana en la pantalla
         setResizable(false); // Evitar que la ventana sea redimensionable
-        this.controlador = controlador;
 
         // Creación del panel principal
         JPanel mainPanel = new JPanel();
@@ -52,45 +48,26 @@ public class VentanaViajeActual extends JFrame{
         }
 
         // Botón Cerrar
-        JButton closeButton = new JButton("CERRAR");
+        closeButton = new JButton("CERRAR");
         closeButton.setBounds(150, 410, 100, 30); // Posición y tamaño del botón
         closeButton.setVisible(false);
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controlador.accionCerrar();
-            }
-        });
+        closeButton.setEnabled(false);
         mainPanel.add(closeButton);
+        closeButton.addActionListener(controlador);
 
         // Botón Pagar
         botonPaga = new JButton("PAGAR");
         botonPaga.setBounds(150, 410, 100, 30); // Posición y tamaño del botón
-        botonPaga.setEnabled(viaje.getStatus().equals("Iniciado")); // Deshabilitar por defecto si el estado no es "Iniciado"
-        botonPaga.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pagarViajeActual();
-                botonPaga.setVisible(false);
-                closeButton.setVisible(true);
-            }
-        });
-
+        botonPaga.setEnabled(true); // Deshabilitar por defecto si el estado no es "Iniciado"
+        botonPaga.addActionListener(controlador);
         mainPanel.add(botonPaga);
         add(mainPanel);
     }
 
-    private void pagarViajeActual() {
-        try {
-            controlador.pagarViaje();
-        } catch (ViajeNoEncontradoException e) {
-            JOptionPane.showMessageDialog(this,"El viaje no fue encontrado. Se ha producido un error.");
-        }
-        JOptionPane.showMessageDialog(this, "Viaje pagado con éxito.");
-    }
 
-    public void actualizarEstado(IViaje viaje) {
+    public void actualizarViaje(IViaje viaje) {
         textFields[0].setText(viaje.getStatus());
+        System.out.println("Entro a actualizar viaje de viaje act");
         Date fecha = viaje.getFecha();
         textFields[1].setText(fecha.getHours() + ":" + fecha.getMinutes() + " - " + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + (fecha.getYear() + 1900));
         if (viaje.getChofer() == null)
@@ -110,5 +87,11 @@ public class VentanaViajeActual extends JFrame{
         textFields[8].setText(String.valueOf(viaje.getCantidadPersonas()));
         textFields[9].setText(viaje.getDistanciaReal() + " km");
         botonPaga.setEnabled(viaje.getStatus().equals("Iniciado"));
+    }
+
+    public void setBotonVisible() {
+        this.botonPaga.setVisible(false);
+        this.closeButton.setVisible(true);
+        this.closeButton.setEnabled(true);
     }
 }

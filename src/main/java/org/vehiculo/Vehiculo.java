@@ -1,18 +1,16 @@
 package org.vehiculo;
 
-
 import org.pedido.Pedido;
-
 
 import java.io.Serializable;
 
 /**
- * Esta clase representa un vehículo con atributos como:
- * Número de patente(numpatente).
- * Capacidad máxima de pasajeros(cantMaxPas).
- * Si admite mascotas(petFriendly).
- * Si admite baúl(baul).
- * Además, permite obtener la prioridad del vehículo para un viaje determinado mediante el método getPrioridad.
+ * La clase abstracta Vehiculo representa un vehículo con atributos como:
+ * - Número de patente (numpatente).
+ * - Capacidad máxima de pasajeros (cantMaxPas).
+ * - Si admite mascotas (petFriendly).
+ * - Si admite baúl (baul).
+ * Además, define métodos para verificar las características del vehículo y calcular la prioridad para un pedido específico.
  */
 public abstract class Vehiculo implements Serializable {
 	protected String numpatente;
@@ -21,118 +19,179 @@ public abstract class Vehiculo implements Serializable {
 	protected boolean baul;
 	protected String estado = "Libre";
 
-	public Vehiculo(){
-
+	/**
+	 * Constructor vacío necesario para la serialización.
+	 */
+	public Vehiculo() {
 	}
 
-	public Vehiculo(String numpatente,int cantmaxpas, boolean petfriendly, boolean baul) {
-		this.numpatente=numpatente;
+	/**
+	 * Constructor que inicializa un vehículo con sus atributos básicos.
+	 *
+	 * @param numpatente   Número de patente del vehículo.
+	 * @param cantmaxpas   Capacidad máxima de pasajeros.
+	 * @param petfriendly  Indica si el vehículo es apto para mascotas.
+	 * @param baul         Indica si el vehículo tiene baúl.
+	 */
+	public Vehiculo(String numpatente, int cantmaxpas, boolean petfriendly, boolean baul) {
+		this.numpatente = numpatente;
 		this.cantMaxPas = cantmaxpas;
 		this.petFriendly = petfriendly;
 		this.baul = baul;
 	}
 
-
+	/**
+	 * Método abstracto que debe ser implementado por las subclases para devolver el tipo de vehículo.
+	 *
+	 * @return Tipo de vehículo como cadena de texto.
+	 */
 	public abstract String getTipo();
 
-
-
 	/**
-	 * Este método se encarga de devolver un objeto de tipo Integer indicando el valor de prioridad para el pedido en cuestión.
-	 * Se aplicó el patrón Template, por un lado tenemos métodos comúnes al algortimo que son los que están dentro de la condición del if.
-	 * Luego las clases que heredan de Vehiculo deberán implementar el método abstracto califica con los detalles concretos de cada clase.
-	 * 
+	 * Método que devuelve la prioridad del vehículo para un pedido específico.
+	 *
+	 * @param pedido Pedido para el cual se calcula la prioridad.
+	 * @return Prioridad del vehículo como un objeto Integer, o null si el vehículo no es apto para el pedido.
+	 *
 	 * <p><strong>Precondiciones:</strong></p>
 	 * <ul>
-	 *   <li>El parametro pedido no puede ser nulo.</li>
+	 *   <li>El parámetro pedido no puede ser nulo.</li>
 	 * </ul>
-	 * 
+	 *
 	 * <p><strong>Postcondiciones:</strong></p>
 	 * <ul>
 	 *   <li>El resultado siempre será un objeto de tipo Integer.</li>
-	 *   <li>El resultado sera null si el vehiculo no es apto para el pedido.</li>
+	 *   <li>El resultado será null si el vehículo no es apto para el pedido.</li>
 	 * </ul>
-	 * 
-	 * @param pedido Será el pedido en cuestión que está queriendo obtener el valor de prioridad del vehículo.
-	 * @return El valor de prioridad o null.
 	 */
 	public Integer getPrioridad(Pedido pedido) {
 		Integer valorPrioridad = null;
-		if(verificaPasajeros(pedido.getCantPersonas()) && verificaBaul(pedido.usoBaul()) && verificaMascota(pedido.getMascota())) {
+		if (verificaPasajeros(pedido.getCantPersonas()) && verificaBaul(pedido.usoBaul()) && verificaMascota(pedido.getMascota())) {
 			valorPrioridad = Integer.valueOf(califica(pedido.usoBaul(), pedido.getCantPersonas()));
 		}
 		return valorPrioridad;
 	}
+
 	/**
-	 * Determina si el vehículo tiene capacidad para los pasajeros requeridos por el pedido.
-	 * 
-	 * @param cantPasajeros La cantidad de pasajeros del pedido.
-	 * @return un boolean.
+	 * Método que verifica si el vehículo tiene capacidad para los pasajeros requeridos por el pedido.
+	 *
+	 * @param cantPasajeros Cantidad de pasajeros del pedido.
+	 * @return true si el vehículo puede llevar la cantidad de pasajeros especificada, false en caso contrario.
 	 */
-	public boolean verificaPasajeros(int cantPasajeros){
-		if (cantPasajeros <= this.cantMaxPas)
-			return true;
-		else
-			return false;
+	public boolean verificaPasajeros(int cantPasajeros) {
+		return cantPasajeros <= this.cantMaxPas;
 	}
+
 	/**
-	 * Determina si el vehículo cumple con la condicion de baul del pedido.
-	 * Si el pedido NO necesita baúl(baul = false) entrará por la rama del if y devolverá true ya que al no necesitar baúl cualquier vehículo cumplirá.
-	 * Si el pedido SI necesita baúl(baul = true) entrará por la rama del else y devolverá true o false dependiendo de si el vehículo determinado tiene esta característica.
-	 * 
-	 * @param cantPasajeros La cantidad de pasajeros del pedido.
-	 * @return un boolean.
+	 * Método que verifica si el vehículo cumple con la condición de baúl del pedido.
+	 *
+	 * @param baul Indica si el pedido requiere baúl.
+	 * @return true si el vehículo cumple con la condición de baúl del pedido, false en caso contrario.
 	 */
 	public boolean verificaBaul(boolean baul) {
-		if(!baul) {
-			return true;
-		}else
-			return this.baul;
+		if (!baul) {
+			return true; // No se necesita baúl, cualquier vehículo cumple
+		} else {
+			return this.baul; // Se necesita baúl, el vehículo debe tener baúl
+		}
 	}
+
 	/**
-	 * idem verificaBaul
+	 * Método que verifica si el vehículo cumple con la condición de mascota del pedido.
+	 *
+	 * @param mascota Indica si el pedido viaja con mascota.
+	 * @return true si el vehículo cumple con la condición de mascota del pedido, false en caso contrario.
 	 */
 	public boolean verificaMascota(boolean mascota) {
-		if(!mascota) {
-			return true;
-		}else
-			return this.petFriendly;
+		if (!mascota) {
+			return true; // No se viaja con mascota, cualquier vehículo cumple
+		} else {
+			return this.petFriendly; // Se viaja con mascota, el vehículo debe ser pet-friendly
+		}
 	}
-	
+
 	/**
-	 * Método abstracto que se encarga de calcular la calificación de prioridad que devolverá el vehículo.
-	 * @param pideBaul Informa si el pedido es con baúl o no.
-	 * @param cantPax Es la cantidad de pasajeros.
-	 * @return un entero que es la calificación.
+	 * Método abstracto que debe ser implementado por las subclases para calcular la calificación de prioridad del vehículo.
+	 *
+	 * @param pideBaul Indica si el pedido requiere baúl.
+	 * @param cantPax  Cantidad de pasajeros del pedido.
+	 * @return Calificación de prioridad del vehículo como entero.
 	 */
 	protected abstract int califica(boolean pideBaul, int cantPax);
 
+	/**
+	 * Getter para obtener el número de patente del vehículo.
+	 *
+	 * @return Número de patente del vehículo como cadena de texto.
+	 */
 	public String getNumpatente() {
 		return numpatente;
 	}
 
+	/**
+	 * Setter para establecer el número de patente del vehículo.
+	 *
+	 * @param numpatente Número de patente del vehículo como cadena de texto.
+	 */
 	public void setNumpatente(String numpatente) {
 		this.numpatente = numpatente;
 	}
 
+	/**
+	 * Getter para obtener la capacidad máxima de pasajeros del vehículo.
+	 *
+	 * @return Capacidad máxima de pasajeros del vehículo como entero.
+	 */
 	public int getCantMaxPas() {
 		return cantMaxPas;
 	}
 
+	/**
+	 * Getter para obtener si el vehículo es apto para mascotas.
+	 *
+	 * @return true si el vehículo es pet-friendly, false en caso contrario.
+	 */
 	public boolean isPetFriendly() {
 		return petFriendly;
 	}
 
+	/**
+	 * Getter para obtener si el vehículo tiene baúl.
+	 *
+	 * @return true si el vehículo tiene baúl, false en caso contrario.
+	 */
 	public boolean isBaul() {
 		return baul;
 	}
 
+	/**
+	 * Setter para establecer el estado del vehículo (Libre u Ocupado).
+	 *
+	 * @param estado Estado del vehículo como cadena de texto ("Libre" o "Ocupado").
+	 */
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 
+	/**
+	 * Getter para obtener el estado actual del vehículo.
+	 *
+	 * @return Estado actual del vehículo como cadena de texto ("Libre" o "Ocupado").
+	 */
 	public String getEstado() {
 		return this.estado;
+	}
+
+	public void setCantMaxPas(int cantMaxPas) {
+		this.cantMaxPas = cantMaxPas;
+	}
+
+	public void setPetFriendly(boolean petFriendly) {
+		this.petFriendly = petFriendly;
+	}
+
+	public void setBaul(boolean baul) {
+		this.baul = baul;
 	}
 
 }

@@ -1,5 +1,8 @@
 package org.simulacion;
 
+import org.controladores.ControladorChofer;
+import org.controladores.ControladorCliente;
+import org.controladores.ControladorSistema;
 import org.hilos.HiloChofer;
 import org.hilos.HiloCliente;
 import org.chofer.Chofer;
@@ -7,7 +10,9 @@ import org.chofer.ChoferContratado;
 import org.chofer.ChoferPermanente;
 import org.chofer.ChoferTemporario;
 import org.excepciones.MaximoChoferesTipoException;
+import org.hilos.HiloSistema;
 import org.pedido.GestionPedidos;
+import org.persistencia.PersistirDatos;
 import org.sistema.Empresa;
 import org.sistema.Fecha;
 import org.usuario.Cliente;
@@ -18,12 +23,13 @@ import org.vehiculo.Combi;
 import org.vehiculo.Moto;
 import org.viaje.GestionViajes;
 
+import java.io.IOException;
+
 public class mainTesting {
     public static void main(String[] args) throws MaximoChoferesTipoException {
         Empresa empresa = Empresa.getInstance();
-        GestionUsuario gestionUsuario=new GestionUsuario();
-        GestionViajes gestionViajes=new GestionViajes();
-        GestionPedidos gestionPedidos=new GestionPedidos();
+        ControladorCliente controladorCliente=new ControladorCliente();
+        ControladorSistema controladorSistema=new ControladorSistema();
 
         int cantClientes = 2;
         int cantidadUnidadesCadaTipo = 2;
@@ -46,15 +52,6 @@ public class mainTesting {
         Cliente cliente1 = new Cliente("sofi", "dijweofj", "wdqwd", "swqdqw");
         Cliente cliente2 = new Cliente("maria", "abc123", "maria", "qwerty"); // Cliente adicional para pruebas
 
-        // Hilos de Choferes
-        Thread hiloChofer1 = new Thread(new HiloChofer(choferT1,gestionViajes));
-        Thread hiloChofer2 = new Thread(new HiloChofer(choferC1,gestionViajes));
-        Thread hiloChofer3 = new Thread(new HiloChofer(choferP1,gestionViajes));
-
-        // Hilos de Clientes
-        Thread hiloCliente1 = new Thread(new HiloCliente(cliente1, 3));
-        Thread hiloCliente2 = new Thread(new HiloCliente(cliente2, 2)); // Cliente adicional para pruebas
-
         // Vehículos
         Moto moto1 = new Moto("111111");
         Moto moto2 = new Moto("222222");
@@ -71,27 +68,13 @@ public class mainTesting {
         empresa.agregaVehiculo(combi2);
 
         // Usuarios
-        gestionUsuario.agregaUsuario("sofi1", "1234", "Sofia1", "Palladino");
-        gestionUsuario.agregaUsuario("sofi2", "1234", "Sofia2", "Palladino");
+        empresa.agregaUsuario("sofi1", "1234", "Sofia1", "Palladino");
+        empresa.agregaUsuario("sofi2", "1234", "Sofia2", "Palladino");
 
-        // Inicio de hilos
-        hiloCliente1.start();
-        hiloCliente2.start();
-        hiloChofer1.start();
-        hiloChofer2.start();
-        hiloChofer3.start();
-
-        try {
-            // Esperar a que los hilos terminen
-            hiloCliente1.join();
-            hiloCliente2.join();
-            hiloChofer1.join();
-            hiloChofer2.join();
-            hiloChofer3.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        empresa.agregaChofer(choferT1);
+        empresa.agregaChofer(choferP1);
+        ControladorChofer controladorChofer1=new ControladorChofer(choferT1);
+        ControladorChofer controladorChofer2=new ControladorChofer(choferP1);
 
     }
-
 }

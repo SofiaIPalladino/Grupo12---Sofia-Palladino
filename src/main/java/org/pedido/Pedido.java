@@ -18,12 +18,42 @@ public class Pedido implements Serializable,Cloneable {
 	private Cliente cliente;
 	private double distancia;
 
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public void setZona(String zona) {
+		this.zona = zona;
+	}
+
+	public boolean isMascota() {
+		return mascota;
+	}
+
+	public void setMascota(boolean mascota) {
+		this.mascota = mascota;
+	}
+
+	public void setEquipaje(String equipaje) {
+		this.equipaje = equipaje;
+	}
+
+	public void setCantPersonas(int cantPersonas) {
+		this.cantPersonas = cantPersonas;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public void setDistancia(double distancia) {
+		this.distancia = distancia;
+	}
 
 	public Pedido(){
 	}
 	/**
 	 * Construye un objeto de tipo Pedido.<br>
-	 * @param fecha: fecha de realizacion del pedido.<br>
 	 * @param zona: zona en donde se efectuara el viaje.<br>
 	 * @param mascota: valor booleano correspondiente al transporte de mascota.<br>
 	 * @param equipaje: tipo de equipaje. <br>
